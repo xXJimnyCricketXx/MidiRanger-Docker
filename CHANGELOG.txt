@@ -1,0 +1,8 @@
+Version 0.1.0
+- Django-Projektgrundgerüst (Models, Admin, Login über Django-Auth)
+- Theme-System 1:1 aus theme_manager.py portiert (alle 15 Original-Themes)
+- Menüleiste inkl. Tastenkürzel aus utils/shortcuts.py
+- Dashboard mit echten Kennzahlen aus der Datenbank
+- Statusleiste (Meldungen / Player / MIDI-Ausgang)
+- Popups: Dokumentation, Tastenkürzel-Übersicht, Log-Viewer, Über MidiRanger!, Changelog
+- Logging identisch zu utils/logger.py (Format, Rotation, Status-Codes)

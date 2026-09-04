@@ -1,0 +1,19 @@
+.venv/
+__pycache__/
+*.pyc
+.git/
+.gitignore
+
+dev-modus/
+midi/
+data/
+logs/
+staticfiles/
+db.sqlite3
+
+.env
+.claude/
+
+# Nur für die lokale Windows-Entwicklung (DLLs + Soundfont) - im Linux-Image
+# kommen libfluidsynth3 + fluid-soundfont-gm stattdessen aus apt.
+assets/

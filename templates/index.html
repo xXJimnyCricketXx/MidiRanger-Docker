@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="de">
+<head>{% include "partials/head.html" %}</head>
+<body>
+    {% include "partials/menubar.html" %}
+    <main class="page dashboard-page">
+        <div class="dashboard-title-row">
+            <h1 class="dashboard-title">MidiRanger! Dashboard</h1>
+        </div>
+
+        {% if songs_message %}<p class="error">{{ songs_message }}</p>{% endif %}
+
+        <div class="dashboard-controls">
+            <button type="button" onclick="location.reload()">Aktualisieren</button>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="mr-card">
+                <div class="mr-card-title">Songs gesamt</div>
+                <div class="mr-card-value">{{ stats.songs_total }}</div>
+            </div>
+            <div class="mr-card">
+                <div class="mr-card-title">Playlists</div>
+                <div class="mr-card-value">{{ stats.playlists_total }}</div>
+            </div>
+            <div class="mr-card">
+                <div class="mr-card-title">Quellen</div>
+                <div class="mr-card-value">{{ stats.sources_total }}</div>
+            </div>
+            <div class="mr-card">
+                <div class="mr-card-title">Audio-Backend</div>
+                <div class="mr-card-value">{{ stats.backend_label|default_if_none:"–" }}</div>
+            </div>
+            <div class="mr-card">
+                <div class="mr-card-title">Fehlende Dateien</div>
+                <div class="mr-card-value">{{ stats.missing_files_count }}</div>
+            </div>
+            <div class="mr-card">
+                <div class="mr-card-title">Fehlende Metadaten</div>
+                <div class="mr-card-value">{{ stats.missing_meta_count }}</div>
+            </div>
+        </div>
+
+        <div class="dashboard-lists">
+            <div class="mr-list-box">
+                <div class="mr-list-title">Zuletzt gespielt</div>
+                {% if stats.recent_play %}
+                    <ul class="mr-list">
+                        {% for line in stats.recent_play %}<li>{{ line }}</li>{% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="mr-list-empty">Keine Einträge vorhanden.</p>
+                {% endif %}
+            </div>
+            <div class="mr-list-box">
+                <div class="mr-list-title">Zuletzt importiert</div>
+                {% if stats.recent_import %}
+                    <ul class="mr-list">
+                        {% for line in stats.recent_import %}<li>{{ line }}</li>{% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="mr-list-empty">Keine Einträge vorhanden.</p>
+                {% endif %}
+            </div>
+            <div class="mr-list-box">
+                <div class="mr-list-title">Top-Interpreten</div>
+                {% if stats.top_artists %}
+                    <ul class="mr-list">
+                        {% for line in stats.top_artists %}<li>{{ line }}</li>{% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="mr-list-empty">Keine Einträge vorhanden.</p>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+    {% include "partials/statusbar.html" %}
+</body>
+</html>

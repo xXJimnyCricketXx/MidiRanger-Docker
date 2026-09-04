@@ -1,0 +1,17 @@
+{% load static %}
+<!doctype html>
+<html lang="de">
+<head>{% include "partials/head.html" %}</head>
+<body>
+    {% include "partials/menubar.html" %}
+    <main class="page search-page">
+        <img class="search-logo" src="{% static 'ressources/themes/' %}{{ theme.logo }}" alt="MidiRanger!">
+
+        <form method="get" action="/search" class="search-row">
+            <input type="text" name="q" class="search-input" placeholder="Titel, Interpret oder Quelle eingeben…" autofocus>
+            <button type="submit">Suchen</button>
+        </form>
+    </main>
+    {% include "partials/statusbar.html" %}
+</body>
+</html>

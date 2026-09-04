@@ -1,0 +1,25 @@
+services:
+  midiranger:
+    build: .
+    image: midiranger:latest
+    container_name: midiranger
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8000}:8000"
+    devices:
+      # Ganzer ALSA-Ordner statt einzelner midiCxDx-Nodes, da sich deren
+      # Nummerierung je nach Anschlussreihenfolge verschieben kann.
+      - /dev/snd:/dev/snd
+    volumes:
+      # DB + Logs + Backups (Unraid-Appdata-Äquivalent).
+      - ${APPDATA_PATH:-./appdata}:/data
+      # Eigener MIDI-Ordner (originals/uploads/lyrics/mixer_output) - kann
+      # auf einem beliebigen Share liegen, wird 1:1 durchgereicht.
+      - ${MIDI_PATH:-./midi}:/midi
+    environment:
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-ChangeThisToAComplexSecret}
+      DJANGO_DEBUG: ${DJANGO_DEBUG:-false}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-*}
+      SEED_ADMIN_USERNAME: ${SEED_ADMIN_USERNAME:-admin}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-admin123}
+      MIDI_OUTPUT_NAME: ${MIDI_OUTPUT_NAME:-}

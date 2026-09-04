@@ -1,0 +1,27 @@
+{% load static %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>{{ title }} · MidiRanger!</title>
+<link rel="icon" type="image/x-icon" href="{% static 'ressources/midiranger.ico' %}">
+<link rel="stylesheet" href="{% static 'styles/style.css' %}">
+<style>
+    :root {
+        --theme-bg: {{ theme.bg }};
+        --theme-surface: {{ theme.surface }};
+        --theme-input-bg: {{ theme.input_bg }};
+        --theme-content-text: {{ theme.content_text }};
+        --theme-accent: {{ theme.accent }};
+        --theme-text: {{ theme.text }};
+        --theme-home-title-text: {{ theme.home_title_text }};
+        --theme-header-text: {{ theme.header_text }};
+        --theme-button-color: {{ theme.button_color }};
+        --theme-button-text: {{ theme.button_text }};
+        --theme-button-hover-color: {{ theme.button_hover_color }};
+        --theme-button-hover-text: {{ theme.button_hover_text }};
+        --theme-link-color: {{ theme.link_color }};
+        --theme-link-hover-color: {{ theme.link_hover_color }};
+        --theme-splash-text: {{ theme.splash_text }};
+        --theme-border: {{ theme.border }};
+        --theme-alternate-bg: {{ theme.alternate_bg }};
+    }
+</style>

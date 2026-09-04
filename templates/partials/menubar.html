@@ -1,0 +1,576 @@
+{% load static %}
+<nav class="menubar">
+    <details class="menu">
+        <summary>Datei</summary>
+        <div class="menu-dropdown">
+            <button type="button" data-modal-target="#importModal" data-shortcut="ctrl+i">Importieren…<span class="menu-shortcut">Ctrl+I</span></button>
+            <button type="button" data-modal-target="#exportModal" data-log-event="export" data-shortcut="ctrl+e">Exportieren…<span class="menu-shortcut">Ctrl+E</span></button>
+            <button type="button" data-modal-target="#backupModal" data-log-event="backup">Backup erstellen…</button>
+            <hr>
+            <button type="button" data-modal-target="#settingsModal">Einstellungen…</button>
+            <hr>
+            <a href="/logout" data-shortcut="ctrl+q">Ausloggen<span class="menu-shortcut">Ctrl+Q</span></a>
+        </div>
+    </details>
+
+    <details class="menu">
+        <summary>Bearbeiten</summary>
+        <div class="menu-dropdown">
+            <form method="post" action="/bearbeiten/reset-selection">
+                {% csrf_token %}
+                <button type="submit" data-shortcut="ctrl+r">Auswahl zurücksetzen<span class="menu-shortcut">Ctrl+R</span></button>
+            </form>
+
+            <div class="menu-has-submenu">
+                <button type="button" class="menu-submenu-trigger">Zur Playlist hinzufügen<span class="menu-shortcut">▶</span></button>
+                <div class="menu-submenu">
+                    {% for playlist in playlists_all %}
+                        <button type="button" class="add-to-playlist-item" data-playlist-id="{{ playlist.id }}">{{ playlist.name }}</button>
+                    {% empty %}
+                        <span class="menu-disabled">Keine Playlists vorhanden</span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {% if playlist_context_id %}
+                <form method="post" action="/bearbeiten/remove-from-playlist">
+                    {% csrf_token %}
+                    <button type="submit" data-shortcut="ctrl+delete">Aus Playlist entfernen<span class="menu-shortcut">Ctrl+Del</span></button>
+                </form>
+                <button type="button" id="clearPlaylistBtn">Playlist leeren</button>
+                <form method="post" action="/bearbeiten/clear-playlist" id="clearPlaylistForm" class="visually-hidden">{% csrf_token %}</form>
+            {% else %}
+                <span class="menu-disabled">Aus Playlist entfernen<span class="menu-shortcut">Ctrl+Del</span></span>
+                <span class="menu-disabled">Playlist leeren</span>
+            {% endif %}
+
+            <form method="post" id="addToPlaylistForm" class="visually-hidden">{% csrf_token %}</form>
+        </div>
+    </details>
+
+    <details class="menu">
+        <summary>Ansicht</summary>
+        <div class="menu-dropdown">
+            <a href="/" data-shortcut="alt+0" data-log-event="dashboard">Dashboard<span class="menu-shortcut">Alt+0</span></a>
+            <a href="/songs" data-shortcut="alt+1" data-log-event="all_songs">Alle Songs<span class="menu-shortcut">Alt+1</span></a>
+            <a href="/favorites" data-shortcut="alt+2" data-log-event="favorites">Favoriten<span class="menu-shortcut">Alt+2</span></a>
+            <a href="/search" data-shortcut="alt+3">Suche<span class="menu-shortcut">Alt+3</span></a>
+            <hr>
+            <button type="button" id="fullscreenToggle">Vollbild (F11)</button>
+        </div>
+    </details>
+
+    <details class="menu">
+        <summary>Quellen</summary>
+        <div class="menu-dropdown">
+            <button type="button" data-modal-target="#sourcesModal" data-shortcut="ctrl+shift+s">Quellen verwalten…<span class="menu-shortcut">Ctrl+Shift+S</span></button>
+        </div>
+    </details>
+
+    <details class="menu">
+        <summary>Playlist</summary>
+        <div class="menu-dropdown">
+            <button type="button" data-modal-target="#playlistsModal" data-shortcut="ctrl+p">Playlist verwalten…<span class="menu-shortcut">Ctrl+P</span></button>
+            {% if playlists_all %}
+                <div class="menu-has-submenu">
+                    <button type="button" class="menu-submenu-trigger">Meine Playlists<span class="menu-shortcut">▶</span></button>
+                    <div class="menu-submenu">
+                        {% for playlist in playlists_all %}
+                            <a href="/playlists/{{ playlist.id }}" data-log-event="playlist" data-log-event-id="{{ playlist.id }}">{{ playlist.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <span class="menu-disabled">Meine Playlists</span>
+            {% endif %}
+        </div>
+    </details>
+
+    <details class="menu">
+        <summary>Tools</summary>
+        <div class="menu-dropdown">
+            <button type="button" data-modal-target="#metadataModal" data-log-event="metadata" data-shortcut="ctrl+m">Metadaten-Analyse<span class="menu-shortcut">Ctrl+M</span></button>
+            <button type="button" data-modal-target="#dbCheckModal" data-log-event="dbcheck" data-shortcut="ctrl+d">Datenbank prüfen<span class="menu-shortcut">Ctrl+D</span></button>
+            <button type="button" data-modal-target="#scanModal" data-log-event="scan" data-shortcut="f5">MIDI-Files scannen<span class="menu-shortcut">F5</span></button>
+            <hr>
+            <button type="button" id="mixerOpenBtn">Mixer öffnen</button>
+        </div>
+    </details>
+
+    <details class="menu">
+        <summary>Hilfe</summary>
+        <div class="menu-dropdown">
+            <button type="button" data-modal-target="#documentationModal" data-log-event="documentation" data-shortcut="f1">Dokumentation<span class="menu-shortcut">F1</span></button>
+            <button type="button" data-modal-target="#shortcutsModal" data-log-event="shortcuts" data-shortcut="f2">Tastenkürzel<span class="menu-shortcut">F2</span></button>
+            <button type="button" data-modal-target="#logsModal" data-log-event="logviewer" data-shortcut="ctrl+l">Log anzeigen…<span class="menu-shortcut">Ctrl+L</span></button>
+            <hr>
+            <button type="button" data-modal-target="#aboutModal" data-log-event="about" data-shortcut="ctrl+h">Über MidiRanger!<span class="menu-shortcut">Ctrl+H</span></button>
+        </div>
+    </details>
+</nav>
+
+<div id="documentationModal" class="mr-modal-overlay">
+    <div class="mr-modal">
+        <h2 class="mr-modal-title">📘 MidiRanger Dokumentation</h2>
+        <iframe id="documentationFrame" class="mr-modal-frame" src="about:blank" data-src="{% static 'docs/documentation.html' %}"></iframe>
+        <div class="mr-modal-actions">
+            <button type="button" data-modal-close>Schließen</button>
+        </div>
+    </div>
+</div>
+
+<div id="shortcutsModal" class="mr-modal-overlay">
+    <div class="mr-modal mr-modal-plain">
+        <h2 class="mr-modal-title mr-modal-title-plain">Tastenkürzel – Übersicht</h2>
+        <div class="mr-modal-table-wrap">
+            <table class="mr-shortcuts-table">
+                <thead>
+                    <tr><th>Menü</th><th>Funktion</th><th>Shortcut</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Datei</td><td>Importieren…</td><td>Ctrl+I</td></tr>
+                    <tr><td>Datei</td><td>Exportieren…</td><td>Ctrl+E</td></tr>
+                    <tr><td>Datei</td><td>Einstellungen…</td><td></td></tr>
+                    <tr><td>Datei</td><td>Ausloggen</td><td>Ctrl+Q</td></tr>
+                    <tr><td>Bearbeiten</td><td>Auswahl zurücksetzen</td><td>Ctrl+R</td></tr>
+                    <tr><td>Bearbeiten</td><td>Aus Playlist entfernen</td><td>Ctrl+Del</td></tr>
+                    <tr><td>Bearbeiten</td><td>Playlist leeren</td><td></td></tr>
+                    <tr><td>Ansicht</td><td>Startseite</td><td>Alt+0</td></tr>
+                    <tr><td>Ansicht</td><td>Alle Songs</td><td>Alt+1</td></tr>
+                    <tr><td>Ansicht</td><td>Favoriten</td><td>Alt+2</td></tr>
+                    <tr><td>Ansicht</td><td>Suche</td><td>Alt+3</td></tr>
+                    <tr><td>Ansicht</td><td>Vollbild (F11)</td><td>F11</td></tr>
+                    <tr><td>Quellen</td><td>Quellen verwalten…</td><td>Ctrl+Shift+S</td></tr>
+                    <tr><td>Playlist</td><td>Playlist verwalten…</td><td>Ctrl+P</td></tr>
+                    <tr><td>Tools</td><td>Metadaten-Analyse</td><td>Ctrl+M</td></tr>
+                    <tr><td>Tools</td><td>Datenbank prüfen</td><td>Ctrl+D</td></tr>
+                    <tr><td>Tools</td><td>Midifiles scannen</td><td>F5</td></tr>
+                    <tr><td>Tools</td><td>Mixer öffnen</td><td></td></tr>
+                    <tr><td>Hilfe</td><td>Dokumentation</td><td>F1</td></tr>
+                    <tr><td>Hilfe</td><td>Tastenkürzel</td><td>F2</td></tr>
+                    <tr><td>Hilfe</td><td>Log anzeigen…</td><td>Ctrl+L</td></tr>
+                    <tr><td>Hilfe</td><td>Über MidiRanger!</td><td>Ctrl+H</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="mr-modal-actions mr-modal-actions-right">
+            <button type="button" class="mr-btn-plain" data-modal-close>Schließen</button>
+        </div>
+    </div>
+</div>
+
+<div id="logsModal" class="mr-modal-overlay">
+    <div class="mr-modal">
+        <div class="mr-log-filters">
+            <button type="button" class="mr-toggle-btn active" data-log-filter="NORMAL">⚫ NORMAL</button>
+            <button type="button" class="mr-toggle-btn" data-log-filter="INFO">🟢 INFO</button>
+            <button type="button" class="mr-toggle-btn" data-log-filter="WARNUNG">🟡 WARNUNG</button>
+            <button type="button" class="mr-toggle-btn" data-log-filter="FEHLER">🔴 FEHLER</button>
+            <button type="button" class="mr-toggle-btn" data-log-filter="DEBUG">🐞 DEBUG</button>
+        </div>
+        <p class="mr-log-filename">📜 Aktuelles Logfile: midiranger.log</p>
+        <div id="logContent" class="mr-log-content"></div>
+        <div class="mr-modal-actions mr-modal-actions-split">
+            <div>
+                <button type="button" id="logRefresh">🔄 Aktualisieren</button>
+                <button type="button" id="logOpenExternal">📂 Im Editor öffnen</button>
+            </div>
+            <button type="button" data-modal-close>Schließen</button>
+        </div>
+    </div>
+</div>
+
+<div id="aboutModal" class="mr-modal-overlay">
+    <div class="mr-modal mr-about">
+        <img class="mr-about-logo" src="{% static 'ressources/themes/' %}{{ theme.logo }}" alt="">
+        <h2 class="mr-modal-title-lg">MidiRanger!</h2>
+        <p class="mr-about-subtitle">Docker Edition • Version {{ app_version }}</p>
+        <p class="mr-about-copyright">© {% now "Y" %} CricketCode Web Solutions<br>Alle Rechte vorbehalten.</p>
+        <p class="mr-about-link"><a href="https://cricketcode.de" target="_blank" rel="noopener">www.cricketcode.de</a></p>
+        <p class="mr-about-info">
+            MidiRanger nutzt freie Bibliotheken unter deren jeweiligen Lizenzen.<br>
+            Alle anderen Marken und Logos sind Eigentum ihrer jeweiligen Inhaber.
+        </p>
+        <div class="mr-modal-actions">
+            <button type="button" data-modal-target="#changelogModal" data-log-event="changelog">Changelog anzeigen</button>
+        </div>
+    </div>
+</div>
+
+<div id="changelogModal" class="mr-modal-overlay">
+    <div class="mr-modal">
+        <h2 class="mr-modal-title-lg">Changelog</h2>
+        <p class="mr-about-subtitle">Docker Edition • Version {{ app_version }}</p>
+        <div class="mr-modal-frame mr-changelog-content">{{ changelog_content }}</div>
+        <div class="mr-modal-actions">
+            <button type="button" data-modal-close>Schließen</button>
+        </div>
+    </div>
+</div>
+
+<div id="importModal" class="mr-modal-overlay {% if import_error %}open{% endif %}">
+    <div class="mr-modal mr-modal-plain mr-modal-import">
+        <h2 class="mr-modal-title-plain">📥 MIDI-Datei importieren</h2>
+
+        {% if import_error %}<p class="error">{{ import_error }}</p>{% endif %}
+
+        <form method="post" action="/songs/import/submit" enctype="multipart/form-data" class="import-form" id="importForm">
+            {% csrf_token %}
+            <input type="hidden" name="temp_id" id="tempId">
+            <input type="hidden" name="original_filename" id="originalFilename">
+            <input type="hidden" name="duration_formatted" id="durationFormatted">
+
+            <label for="midiFileDisplay">MIDI-Datei auswählen:</label>
+            <div class="file-pick-row">
+                <input type="text" id="midiFileDisplay" readonly>
+                <button type="button" id="midiBrowseBtn" class="mr-btn-plain">Durchsuchen…</button>
+            </div>
+            <input type="file" id="midiFileInput" accept=".mid,.midi" class="visually-hidden">
+
+            <label for="lyricsFileDisplay">Songtext (optional):</label>
+            <div class="file-pick-row">
+                <input type="text" id="lyricsFileDisplay" readonly>
+                <button type="button" id="lyricsBrowseBtn" class="mr-btn-plain">Lyrics auswählen…</button>
+            </div>
+            <input type="file" name="lyrics_file" id="lyricsFileInput" accept=".txt" class="visually-hidden">
+
+            <label for="titleInput">Titel</label>
+            <input type="text" name="title" id="titleInput">
+
+            <label for="artistInput">Interpret</label>
+            <input type="text" name="artist" id="artistInput">
+
+            <label for="genreInput">Genre</label>
+            <input type="text" name="genre" id="genreInput">
+
+            <label for="sourceInput">Quelle</label>
+            <select name="source_id" id="sourceInput">
+                {% for source in sources %}
+                    <option value="{{ source.id }}">{{ source.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="collectionInput">Collection</label>
+            <input type="text" name="collection" id="collectionInput">
+
+            <label for="bpmInput">BPM</label>
+            <input type="number" name="bpm" id="bpmInput">
+
+            <label for="keyInput">Tonart</label>
+            <select name="key" id="keyInput">
+                {% for k in tonarten %}
+                    <option value="{{ k }}">{{ k }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="timeSigInput">Takt (z. B. 4/4)</label>
+            <input type="text" name="time_sig" id="timeSigInput">
+
+            <label class="checkbox-label">
+                <input type="checkbox" name="is_edited">
+                Melodie entfernt / bearbeitet
+            </label>
+
+            <label for="commentInput">Kommentar</label>
+            <textarea name="comment" id="commentInput" rows="4"></textarea>
+
+            <div class="import-form-actions">
+                <button type="submit" class="mr-btn-plain">📥 Importieren</button>
+                <button type="button" data-modal-close class="mr-btn-plain">Abbrechen</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="backupModal" class="mr-modal-overlay">
+    <div class="mr-modal mr-modal-plain mr-modal-backup">
+        <h2 class="mr-modal-title-plain">💾 Backup erstellen</h2>
+
+        <p id="backupLabel"></p>
+
+        <div class="mr-progress-row">
+            <div class="mr-progress-track">
+                <div id="backupProgressBar" class="mr-progress-fill" style="width: 0%"></div>
+            </div>
+            <div id="backupPercent" class="mr-progress-percent">0%</div>
+        </div>
+
+        <div class="mr-modal-actions mr-modal-actions-split">
+            <div>
+                <button type="button" id="backupStartBtn" class="mr-btn-plain">🚀 Backup starten</button>
+                <a id="backupDownloadLink" class="mr-btn-plain-link" style="display:none" download>⬇ Herunterladen</a>
+            </div>
+            <button type="button" data-modal-close class="mr-btn-plain">❌ Abbrechen</button>
+        </div>
+    </div>
+</div>
+
+<div id="exportModal" class="mr-modal-overlay">
+    <div class="mr-modal mr-modal-plain mr-modal-backup">
+        <h2 class="mr-modal-title-plain">🎵 Songs exportieren</h2>
+
+        <p id="exportLabel"></p>
+
+        <div class="mr-progress-row">
+            <div class="mr-progress-track">
+                <div id="exportProgressBar" class="mr-progress-fill" style="width: 0%"></div>
+            </div>
+            <div id="exportPercent" class="mr-progress-percent">0%</div>
+        </div>
+
+        <div class="mr-modal-actions mr-modal-actions-split">
+            <div>
+                <button type="button" id="exportStartBtn" class="mr-btn-plain">🚀 Export starten</button>
+                <a id="exportDownloadLink" class="mr-btn-plain-link" style="display:none" download>⬇ Herunterladen</a>
+            </div>
+            <button type="button" data-modal-close class="mr-btn-plain">❌ Abbrechen</button>
+        </div>
+    </div>
+</div>
+
+<div id="metadataModal" class="mr-modal-overlay">
+    <div class="mr-modal mr-modal-plain mr-modal-backup">
+        <h2 class="mr-modal-title-plain">🎵 Metadaten-Analyse</h2>
+
+        <p id="metadataLabel">Analysiere MIDI-Dateien…</p>
+
+        <div class="mr-progress-row">
+            <div class="mr-progress-track">
+                <div id="metadataProgressBar" class="mr-progress-fill" style="width: 0%"></div>
+            </div>
+            <div id="metadataPercent" class="mr-progress-percent">0%</div>
+        </div>
+
+        <div class="mr-modal-actions mr-modal-actions-right">
+            <button type="button" id="metadataCloseBtn" data-modal-close class="mr-btn-plain">Abbrechen</button>
+        </div>
+    </div>
+</div>
+
+<div id="dbCheckModal" class="mr-modal-overlay">
+    <div class="mr-modal mr-modal-plain mr-modal-tool">
+        <h2 class="mr-modal-title-plain">💾 Datenbank überprüfen</h2>
+
+        <p id="dbCheckLabel">Prüfe Datenbankeinträge ...</p>
+
+        <div class="mr-progress-row">
+            <div class="mr-progress-track">
+                <div id="dbCheckProgressBar" class="mr-progress-fill" style="width: 0%"></div>
+            </div>
+            <div id="dbCheckPercent" class="mr-progress-percent">0%</div>
+        </div>
+
+        <div class="mr-tool-list" id="dbCheckList"></div>
+
+        <div class="mr-modal-actions mr-modal-actions-right" id="dbCheckConfirmRow" hidden>
+            <button type="button" id="dbCheckFlagBtn" class="mr-btn-plain">Nein, nur markieren</button>
+            <button type="button" id="dbCheckDeleteBtn" class="mr-btn-plain">Ja, löschen</button>
+        </div>
+
+        <div class="mr-modal-actions mr-modal-actions-right" id="dbCheckCloseRow">
+            <button type="button" id="dbCheckCloseBtn" data-modal-close class="mr-btn-plain" disabled>Schließen</button>
+        </div>
+    </div>
+</div>
+
+<div id="scanModal" class="mr-modal-overlay">
+    <div class="mr-modal mr-modal-plain mr-modal-tool">
+        <h2 class="mr-modal-title-plain">🔍 MIDI-Scanner</h2>
+
+        <p id="scanLabel">Scanner gestartet:</p>
+
+        <div class="mr-progress-row">
+            <div class="mr-progress-track">
+                <div id="scanProgressBar" class="mr-progress-fill" style="width: 0%"></div>
+            </div>
+            <div id="scanPercent" class="mr-progress-percent">0%</div>
+        </div>
+
+        <div class="mr-tool-list" id="scanList"></div>
+
+        <div class="mr-modal-actions mr-modal-actions-right" id="scanConfirmRow" hidden>
+            <button type="button" id="scanDeclineBtn" class="mr-btn-plain">Nein</button>
+            <button type="button" id="scanImportBtn" class="mr-btn-plain">Ja, hinzufügen</button>
+        </div>
+
+        <div class="mr-modal-actions mr-modal-actions-right" id="scanCloseRow">
+            <button type="button" id="scanCloseBtn" data-modal-close class="mr-btn-plain" disabled>Schließen</button>
+        </div>
+    </div>
+</div>
+
+<div id="mixerModal" class="mr-modal-overlay">
+    <div class="mr-modal mr-modal-plain mr-modal-mixer" id="mixerModalBody">
+    </div>
+</div>
+
+<div id="settingsModal" class="mr-modal-overlay">
+    <div class="mr-modal mr-modal-plain mr-modal-settings">
+        <h2 class="mr-modal-title-plain">⚙ Einstellungen</h2>
+        <form method="post" action="/settings/save" id="settingsForm">
+            {% csrf_token %}
+
+            <fieldset class="mr-groupbox">
+                <legend>Allgemein</legend>
+
+                <div class="mr-form-row">
+                    <label for="settingsThemeSelect">Theme:</label>
+                    <select name="theme" id="settingsThemeSelect">
+                        {% for th in all_themes %}
+                            <option value="{{ th.key }}" {% if settings.theme == th.key %}selected{% endif %}>{{ th.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </fieldset>
+
+            <fieldset class="mr-groupbox">
+                <legend>Audio</legend>
+
+                <div class="mr-form-row">
+                    <label for="backendSelect">Audio-Backend:</label>
+                    <select name="backend" id="backendSelect">
+                        <option value="fluidsynth" {% if settings.backend == "fluidsynth" %}selected{% endif %}>fluidsynth</option>
+                        <option value="roland" {% if settings.backend == "roland" %}selected{% endif %}>roland</option>
+                    </select>
+                </div>
+
+                <div class="mr-form-row">
+                    <label for="volumeSlider">Lautstärke (0–100%):</label>
+                    <input type="range" name="master_volume" id="volumeSlider" min="0" max="100" value="{{ settings.master_volume }}">
+                </div>
+            </fieldset>
+
+            <fieldset class="mr-groupbox mr-groupbox-checkboxes">
+                <legend>Verhalten</legend>
+
+                <label class="checkbox-label">
+                    <input type="checkbox" name="autoscan_on_start" {% if settings.autoscan_on_start %}checked{% endif %}>
+                    Datenbank beim Start automatisch prüfen
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" name="start_fullscreen" {% if settings.start_fullscreen %}checked{% endif %}>
+                    Im Vollbildmodus starten
+                </label>
+            </fieldset>
+
+            <div class="import-form-actions">
+                <button type="submit" formaction="/settings/reset" class="mr-btn-plain">Werkseinstellungen</button>
+                <button type="button" id="settingsCancelBtn" data-modal-close class="mr-btn-plain">Abbrechen</button>
+                <button type="submit" class="mr-btn-plain">Speichern</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="sourcesModal" class="mr-modal-overlay">
+    <div class="mr-modal mr-modal-plain mr-modal-sources">
+        <h2 class="mr-modal-title-center">📁 Quellen verwalten</h2>
+
+        <div class="mr-manager-list" id="sourcesList">
+            {% for source in sources %}
+                <div class="mr-manager-row" data-id="{{ source.id }}" data-name="{{ source.name }}" data-count="{{ source.songs.count }}">{{ source.name }}&nbsp;&nbsp;({{ source.songs.count }} Songs)</div>
+            {% endfor %}
+        </div>
+
+        <form method="post" action="/sources/add" class="mr-manager-add-row">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Neue Quelle hinzufügen…">
+            <button type="submit">Hinzufügen</button>
+        </form>
+
+        <div class="mr-modal-actions mr-modal-actions-split">
+            <div>
+                <button type="button" id="sourceRenameBtn">Umbenennen</button>
+                <button type="button" id="sourceDeleteBtn">Löschen…</button>
+            </div>
+            <button type="button" data-modal-close>Schließen</button>
+        </div>
+
+        <form method="post" action="/sources/rename" id="sourceRenameForm" class="visually-hidden">
+            {% csrf_token %}
+            <input type="hidden" name="source_id">
+            <input type="hidden" name="new_name">
+        </form>
+
+        <form method="post" action="/sources/delete" id="sourceDeleteForm" class="visually-hidden">
+            {% csrf_token %}
+            <input type="hidden" name="source_id">
+            <input type="hidden" name="reassign_to">
+        </form>
+    </div>
+</div>
+
+<div id="managerRenameModal" class="mr-modal-overlay">
+    <div class="mr-modal mr-modal-plain mr-modal-rename">
+        <h2 class="mr-modal-title-plain">Umbenennen</h2>
+        <label for="managerRenameInput">Neuer Name:</label>
+        <input type="text" id="managerRenameInput">
+        <div class="mr-modal-actions mr-modal-actions-right">
+            <button type="button" id="managerRenameConfirmBtn" class="mr-btn-plain">OK</button>
+            <button type="button" data-modal-close class="mr-btn-plain">Abbrechen</button>
+        </div>
+    </div>
+</div>
+
+<div id="managerReassignModal" class="mr-modal-overlay">
+    <div class="mr-modal mr-modal-plain mr-modal-reassign">
+        <h2 class="mr-modal-title-plain" id="reassignTitle">Songs umbuchen</h2>
+        <label for="reassignSelect">Ziel auswählen:</label>
+        <select id="reassignSelect"></select>
+        <div class="mr-modal-actions mr-modal-actions-right">
+            <button type="button" id="reassignConfirmBtn">Umbuchen &amp; Löschen</button>
+            <button type="button" data-modal-close>Abbrechen</button>
+        </div>
+    </div>
+</div>
+
+<div id="playlistsModal" class="mr-modal-overlay">
+    <div class="mr-modal mr-modal-plain mr-modal-playlists">
+        <h2 class="mr-modal-title-center">🎧 Playlists verwalten</h2>
+
+        <div class="mr-manager-list" id="playlistsList">
+            {% for playlist in playlists_all %}
+                <div class="mr-manager-row" data-id="{{ playlist.id }}" data-name="{{ playlist.name }}" data-count="{{ playlist.songs.count }}">{{ playlist.name }}&nbsp;&nbsp;({{ playlist.songs.count }} Songs)</div>
+            {% endfor %}
+        </div>
+
+        <form method="post" action="/playlists/add" class="mr-manager-add-row">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Neue Playlist hinzufügen…">
+            <button type="submit">Hinzufügen</button>
+        </form>
+
+        <div class="mr-modal-actions mr-modal-actions-split">
+            <div>
+                <button type="button" id="playlistRenameBtn">Umbenennen</button>
+                <button type="button" id="playlistDeleteBtn">Löschen…</button>
+            </div>
+            <button type="button" data-modal-close>Schließen</button>
+        </div>
+
+        <form method="post" action="/playlists/rename" id="playlistRenameForm" class="visually-hidden">
+            {% csrf_token %}
+            <input type="hidden" name="playlist_id">
+            <input type="hidden" name="new_name">
+        </form>
+
+        <form method="post" action="/playlists/delete" id="playlistDeleteForm" class="visually-hidden">
+            {% csrf_token %}
+            <input type="hidden" name="playlist_id">
+            <input type="hidden" name="reassign_to">
+        </form>
+    </div>
+</div>
+
+<script>window.THEMES_RESOLVED = {{ themes_json|safe }};</script>
+<script src="{% static 'scripts/menubar.js' %}" defer></script>
+<script src="{% static 'scripts/logviewer.js' %}" defer></script>
+<script src="{% static 'scripts/import.js' %}" defer></script>
+<script src="{% static 'scripts/backup.js' %}" defer></script>
+<script src="{% static 'scripts/export.js' %}" defer></script>
+<script src="{% static 'scripts/metadata.js' %}" defer></script>
+<script src="{% static 'scripts/dbcheck.js' %}" defer></script>
+<script src="{% static 'scripts/scan.js' %}" defer></script>
+<script src="{% static 'scripts/mixer.js' %}" defer></script>
+<script src="{% static 'scripts/settings.js' %}" defer></script>
+<script src="{% static 'scripts/manager_dialogs.js' %}" defer></script>

@@ -1,0 +1,175 @@
+{% load static %}
+<!doctype html>
+<html lang="de">
+<head>{% include "partials/head.html" %}</head>
+<body>
+    {% include "partials/menubar.html" %}
+    <main class="page songs-page">
+        <div class="mr-table-header">{{ header_title }} – {{ songs_count }} Titel</div>
+
+        {% if songs_message %}<p class="error">{{ songs_message }}</p>{% endif %}
+
+        <div class="mr-table-scroll">
+            <table class="mr-song-table" {% if favorites_view %}data-favorites-view{% endif %}>
+                <colgroup>
+                    <col style="width:40px">
+                    <col style="width:40px">
+                    <col>
+                    <col>
+                    <col style="width:130px">
+                    <col style="width:70px">
+                    <col style="width:60px">
+                    <col style="width:70px">
+                    <col style="width:60px">
+                    <col style="width:130px">
+                    <col style="width:130px">
+                    <col style="width:90px">
+                    <col style="width:100px">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th title="Auswahl" data-sort="bool"><img src="{% static 'ressources/icons/check.png' %}" alt="Auswahl"></th>
+                        <th title="Favorit" data-sort="bool"><img src="{% static 'ressources/icons/fav_off.png' %}" alt="Favorit"></th>
+                        <th title="Titel" data-sort="text">Titel</th>
+                        <th title="Interpret" data-sort="text">Interpret</th>
+                        <th title="Genre" data-sort="text">Genre</th>
+                        <th title="Dauer" data-sort="duration">Dauer</th>
+                        <th title="BPM" data-sort="number">BPM</th>
+                        <th title="Tonart" data-sort="text">Tonart</th>
+                        <th title="Takt" data-sort="text">Takt</th>
+                        <th title="Quelle" data-sort="text">Quelle</th>
+                        <th title="Collection" data-sort="text">Collection</th>
+                        <th title="Bearbeitet" data-sort="bool">Bearbeitet</th>
+                        <th title="Aktionen">Aktionen</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for song in songs %}
+                        <tr data-song-id="{{ song.id }}" data-title="{{ song.title|default:'' }}">
+                            <td class="mr-col-center">
+                                <div class="mr-check-box {% if song.is_selected %}checked{% endif %}" data-action="toggle-selected"></div>
+                            </td>
+                            <td class="mr-col-center">
+                                {% if song.is_favorite %}
+                                    <img class="mr-fav-toggle" data-action="toggle-favorite" src="{% static 'ressources/icons/fav_on.png' %}" alt="Favorit">
+                                {% else %}
+                                    <img class="mr-fav-toggle" data-action="toggle-favorite" src="{% static 'ressources/icons/fav_off.png' %}" alt="Favorit">
+                                {% endif %}
+                            </td>
+                            <td class="mr-col-title">{{ song.title|default:"" }}</td>
+                            <td class="mr-col-artist">{{ song.artist|default:"" }}</td>
+                            <td>{{ song.genre|default:"" }}</td>
+                            <td class="mr-col-center">{{ song.duration|default:"" }}</td>
+                            <td class="mr-col-center">{{ song.bpm|default:"" }}</td>
+                            <td class="mr-col-center">{{ song.key|default:"" }}</td>
+                            <td class="mr-col-center">{{ song.time_sig|default:"" }}</td>
+                            <td>{% if not hide_source %}{{ song.source.name|default:"Unbekannt" }}{% endif %}</td>
+                            <td>{{ song.collection|default:"" }}</td>
+                            <td class="mr-col-center">{% if song.is_edited %}Ja{% endif %}</td>
+                            <td>
+                                <div class="mr-row-actions">
+                                    {% if now_playing and now_playing.id == song.id %}
+                                        <img src="{% static 'ressources/icons/stop.png' %}" alt="Stop" data-action="stop">
+                                    {% else %}
+                                        <img src="{% static 'ressources/icons/play.png' %}" alt="Play" data-action="play">
+                                    {% endif %}
+                                    <img src="{% static 'ressources/icons/menu.png' %}" alt="Menü" data-action="menu">
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+    {% include "partials/statusbar.html" %}
+
+    <div id="songContextMenu" class="mr-context-menu" hidden>
+        <button type="button" data-action="edit">Song bearbeiten…</button>
+        <button type="button" data-action="lyrics">Lyrics anzeigen…</button>
+        <button type="button" data-action="mixer">Im Mixer öffnen…</button>
+        <hr>
+        <button type="button" data-action="download">Datei herunterladen…</button>
+        <button type="button" data-action="delete">Löschen…</button>
+    </div>
+
+    <div id="editSongModal" class="mr-modal-overlay">
+        <div class="mr-modal mr-modal-plain mr-modal-import">
+            <h2 class="mr-modal-title-plain">📝 Song bearbeiten</h2>
+
+            <form method="post" enctype="multipart/form-data" class="import-form" id="editSongForm">
+                {% csrf_token %}
+
+                <label for="editTitleInput">Titel</label>
+                <input type="text" name="title" id="editTitleInput">
+
+                <label for="editArtistInput">Interpret</label>
+                <input type="text" name="artist" id="editArtistInput">
+
+                <label for="editGenreInput">Genre</label>
+                <input type="text" name="genre" id="editGenreInput">
+
+                <label for="editSourceInput">Quelle</label>
+                <select name="source_id" id="editSourceInput">
+                    {% for source in sources %}
+                        <option value="{{ source.id }}">{{ source.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="editCollectionInput">Collection</label>
+                <input type="text" name="collection" id="editCollectionInput">
+
+                <label for="editBpmInput">BPM</label>
+                <input type="number" name="bpm" id="editBpmInput">
+
+                <label for="editKeyInput">Tonart</label>
+                <select name="key" id="editKeyInput">
+                    {% for k in tonarten %}
+                        <option value="{{ k }}">{{ k }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="editTimeSigInput">Takt (z. B. 4/4)</label>
+                <input type="text" name="time_sig" id="editTimeSigInput">
+
+                <label class="checkbox-label">
+                    <input type="checkbox" name="is_edited" id="editIsEditedInput">
+                    Melodie entfernt / bearbeitet
+                </label>
+
+                <label for="editCommentInput">Kommentar</label>
+                <textarea name="comment" id="editCommentInput" rows="4"></textarea>
+
+                <p id="editLyricsInfo"></p>
+                <div class="file-pick-row">
+                    <input type="text" id="editLyricsDisplay" readonly placeholder="Keine neue Datei gewählt">
+                    <button type="button" id="editLyricsBrowseBtn" class="mr-btn-plain">Lyrics hinzufügen / ändern</button>
+                </div>
+                <input type="file" name="lyrics_file" id="editLyricsFileInput" accept=".txt" class="visually-hidden">
+
+                <div class="import-form-actions">
+                    <button type="submit" class="mr-btn-plain">💾 Speichern</button>
+                    <button type="button" data-modal-close class="mr-btn-plain">Abbrechen</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="lyricsModal" class="mr-modal-overlay">
+        <div class="mr-modal mr-modal-plain mr-modal-lyrics">
+            <h2 class="mr-lyrics-title">Songtext</h2>
+            <p class="mr-lyrics-subtitle" id="lyricsSongTitle"></p>
+            <textarea class="mr-lyrics-content" id="lyricsContent" readonly></textarea>
+            <div class="mr-modal-actions">
+                <button type="button" id="lyricsOpenExternalBtn" class="mr-btn-plain">Extern öffnen</button>
+                <button type="button" id="lyricsPrintBtn" class="mr-btn-plain">Drucken</button>
+                <button type="button" data-modal-close class="mr-btn-plain">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <form method="post" id="songDeleteForm" class="visually-hidden">{% csrf_token %}</form>
+
+    <script src="{% static 'scripts/songs.js' %}" defer></script>
+</body>
+</html>

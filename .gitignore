@@ -1,0 +1,27 @@
+__pycache__/
+*.pyc
+.venv/
+db.sqlite3
+staticfiles/
+data/
+logs/
+/midi/
+backups/*
+*.log
+.env
+.DS_Store
+docker-compose.override.yml
+.claude/settings.local.json
+
+# Reference copy of the old PySide6 desktop app, kept locally while porting.
+# Not part of this app and never committed.
+/dev-modus/
+
+# Lokale Windows-Dev-Assets (FluidSynth-DLLs + 142-MB-Soundfont) - über
+# GitHubs 100-MB-Push-Limit, im Docker-Image kommen beide stattdessen aus
+# apt (libfluidsynth3 + fluid-soundfont-gm). Manuell aus dem alten Projekt
+# kopieren, siehe app/paths.py.
+/assets/
+
+# lokale Test-Ordner für docker-compose up (siehe .env APPDATA_PATH/MIDI_PATH)
+/appdata/

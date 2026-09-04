@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>MidiRanger – Dokumentation</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /*==================================================
+        Global Layout
+        ==================================================*/
+
+        body {
+            margin: 0;
+            font-family: system-ui, Arial, sans-serif;
+            background: #ffffff;
+            color: #333333;
+            line-height: 1.6;
+        }
+
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /*==================================================
+        Header
+        ==================================================*/
+
+        .doc-header {
+            padding: 1.5rem 2rem;
+            background: #fafafa;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .doc-header h1 {
+            margin: 0 0 0.3rem 0;
+        }
+
+        /*==================================================
+        Sidebar Navigation
+        ==================================================*/
+
+        .doc-container {
+            display: flex;
+            min-height: calc(100vh - 60px);
+        }
+
+        .doc-sidebar {
+            width: 250px;
+            background: #f3f3f3;
+            border-right: 1px solid #ddd;
+            padding: 1.2rem;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .doc-sidebar h2 {
+            margin-top: 0;
+        }
+
+        .doc-sidebar ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .doc-sidebar li {
+            margin: 0.4rem 0;
+        }
+
+        .doc-sidebar a {
+            font-size: 0.95rem;
+        }
+
+        /*==================================================
+        Content
+        ==================================================*/
+
+        .doc-content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1000px;
+        }
+
+        .doc-content section {
+            margin-bottom: 3rem;
+        }
+
+        .doc-content h2 {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 0.3rem;
+        }
+
+        .doc-back-to-top {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+
+    </style>
+</head>
+<body class="doc-layout">
+
+    <header class="doc-header">
+        <h1>MidiRanger – Benutzerhandbuch</h1>
+        <p>Version 1.0 · Stand: Dezember 2025</p>
+    </header>
+
+    <div class="doc-container">
+        <!-- Sidebar / Inhaltsverzeichnis -->
+        <nav class="doc-sidebar">
+            <h2>Inhalt</h2>
+            <ul>
+                <li><a href="#intro">1. Einführung</a></li>
+                <li><a href="#install">2. Installation & erste Schritte</a></li>
+                <li><a href="#ui-overview">3. Benutzeroberfläche</a></li>
+                <li><a href="#menu">4. Menüleiste & Funktionen</a></li>
+                <li><a href="#songs-db">5. Songs & Datenbank</a></li>
+                <li><a href="#sources">6. Quellen</a></li>
+                <li><a href="#playlists">7. Playlisten</a></li>
+                <li><a href="#player">8. Player & Audioausgabe</a></li>
+                <li><a href="#mixer">9. Mixer</a></li>
+                <li><a href="#tools">10. Werkzeuge / Tools</a></li>
+                <li><a href="#settings">11. Einstellungen & Konfiguration</a></li>
+                <li><a href="#statusbar">12. Statusleiste & Fehlermeldungen</a></li>
+                <li><a href="#changelog">13. Versionen & Changelog</a></li>
+            </ul>
+        </nav>
+
+        <!-- Hauptinhalt -->
+        <main class="doc-content">
+            <section id="intro">
+                <h2>1. Einführung</h2>
+
+                <h3>1.1 Was ist MidiRanger?</h3>
+                <p>
+                    MidiRanger ist ein Desktop-Werkzeug zur Verwaltung, Analyse und Wiedergabe von MIDI-Dateien.
+                    Die Software hilft dabei, umfangreiche MIDI-Sammlungen komfortabel zu organisieren,
+                    Metadaten auszulesen und Songs über interne oder externe MIDI-Geräte abzuspielen.
+                    Besonders nützlich ist MidiRanger für Anwender, die mit Keyboards, Synthesizern,
+                    Arranger-Workstations oder digitalen Audioumgebungen arbeiten.
+                </p>
+
+                <p>
+                    Das Herzstück der Anwendung ist eine leistungsstarke MIDI-Engine, die sowohl
+                    softwarebasierte Synthese (z. B. über FluidSynth) als auch Hardware-Ausgänge
+                    wie MIDI-Interfaces oder Keyboards unterstützt. 
+                    Zusätzlich erleichtern Werkzeuge wie die Metadaten-Analyse, der Mixer
+                    und ein integrierter Datenbank-Check die Arbeit mit großen Songbibliotheken.
+                </p>
+
+                <h3>1.2 Kernfunktionen im Überblick</h3>
+                <ul>
+                    <li>Importieren und Verwalten von MIDI-Dateien (automatische Metadaten-Erkennung)</li>
+                    <li>Strukturierte Datenbank mit Such- und Filterfunktionen</li>
+                    <li>Integrierter MIDI-Player mit variabler Audio-/MIDI-Ausgabe</li>
+                    <li>Mixer für die Live-Steuerung einzelner MIDI-Kanäle</li>
+                    <li>Werkzeuge wie Metadaten-Analyse oder Datenbank-Überprüfung</li>
+                    <li>Benutzerfreundliche Oberfläche im modernen UI-Design</li>
+                </ul>
+
+                <h3>1.3 Systemvoraussetzungen</h3>
+                <p>
+                    MidiRanger ist eine Windows-Desktopanwendung. Die folgenden Voraussetzungen
+                    stellen Richtwerte dar und basieren auf den üblichen Anforderungen
+                    für Python-basierten Audio-/MIDI-Softwarebetrieb:
+                </p>
+
+                <h4>Unterstütztes Betriebssystem</h4>
+                <ul>
+                    <li>Windows 10 (64-Bit) oder neuer</li>
+                </ul>
+
+                <h4>Empfohlene Hardware</h4>
+                <ul>
+                    <li>Prozessor: Intel Core i3 oder besser</li>
+                    <li>Arbeitsspeicher: mindestens 4 GB (empfohlen: 8 GB)</li>
+                    <li>Freier Speicherplatz: ca. 200 MB für Anwendung + Platz für MIDI-Dateien</li>
+                </ul>
+
+                <h4>Zusätzliche Software</h4>
+                <ul>
+                    <li>Keine Installation zusätzlicher Komponenten erforderlich —
+                        alle benötigten Bibliotheken werden mitgeliefert.</li>
+                    <li>Optional: MIDI-Interface für die Wiedergabe auf externen Geräten
+                        (z. B. Roland UM-ONE, USB-MIDI-Ports, Audio-Interfaces mit MIDI-Out).</li>
+                </ul>
+
+                <h3>1.4 Hinweis zur ersten Nutzung</h3>
+                <p>
+                    Beim ersten Start legt MidiRanger automatisch die interne Datenbank an.
+                    Anschließend können MIDI-Dateien importiert oder bestehende Ordner
+                    als Quellen hinzugefügt werden.
+                </p>
+            </section>
+
+            <section id="install">
+                <h2>2. Installation & erste Schritte</h2>
+
+                <h3>2.1 Installation</h3>
+                <p>
+                    Für MidiRanger ist keine klassische Installation erforderlich. 
+                    Die Anwendung wird als vollständig kompilierte, portable 
+                    Windows-Exe bereitgestellt. Das bedeutet:
+                </p>
+
+                <ul>
+                    <li>Kein Setup-Programm</li>
+                    <li>Keine Änderungen an Systemordnern oder der Registry</li>
+                    <li>Alle Komponenten befinden sich in einem einzigen Ordner</li>
+                </ul>
+
+                <p>
+                    Um MidiRanger zu verwenden, genügt es, das bereitgestellte ZIP-Archiv 
+                    zu entpacken oder den vollständigen Programmordner an einen beliebigen 
+                    Speicherort zu kopieren (z. B. Festplatte, USB-Stick).
+                </p>
+
+                <h3>2.2 Programm starten</h3>
+                <p>
+                    Nach dem Entpacken kann die Anwendung über die Datei 
+                    <strong>MidiRanger.exe</strong> gestartet werden.  
+                    Administratorrechte sind nicht erforderlich.
+                </p>
+
+                <h3>2.3 Ordnerübersicht</h3>
+                <p>
+                    Der Programmordner enthält alle für den Betrieb notwendigen Dateien 
+                    und Unterordner. Die wichtigsten sind:
+                </p>
+
+                <ul>
+                    <li><strong>config/</strong> – Einstellungen der Anwendung (settings.json)</li>
+                    <li><strong>data/</strong> – interne Datenbank (midiranger.db)</li>
+                    <li><strong>docs/</strong> – Benutzerhandbuch und Dokumentationsdateien</li>
+                    <li><strong>logs/</strong> – Logdateien der Anwendung</li>
+                    <li><strong>midi/</strong> – Arbeitsverzeichnis für MIDI-Dateien</li>
+                </ul>
+
+                <p>
+                    Das Verzeichnis <strong>midi/</strong> ist das zentrale Arbeitsverzeichnis von MidiRanger. 
+                    Hier legt das Programm importierte Dateien, geschützte Originale, Lyrics sowie 
+                    Mixer-Exporte ab. Die Unterordner werden beim ersten Start automatisch erzeugt.
+                </p>
+
+                <ul>
+                    <li><strong>midi/uploads/</strong><br>
+                        Enthält alle MIDI-Dateien, die über den Import-Dialog hinzugefügt wurden.  
+                        Dies ist der Standardablageort für neue Songs.
+                    </li>
+
+                    <li><strong>midi/originals/</strong><br>
+                        Enthält geschützte Originaldateien. Dateien in diesem Ordner können in MidiRanger 
+                        nicht gelöscht werden, um einen versehentlichen Verlust zu verhindern.
+                    </li>
+
+                    <li><strong>midi/lyrics/</strong><br>
+                        Hier werden zugeordnete Text-Dateien gespeichert.  
+                        Eine Lyrics-Datei wird beim Hinzufügen automatisch in dieses Verzeichnis kopiert.
+                    </li>
+
+                    <li><strong>midi/mixer_output/</strong><br>
+                        Ablageort für exportierte MIDI-Dateien, die über den Mixer neu erzeugt wurden.
+                    </li>
+                </ul>
+
+                <p>
+                    Der Nutzer kann diese Ordner bei Bedarf im Windows-Explorer einsehen. Eine 
+                    Verwaltung der Ordner findet ausschließlich außerhalb des Programms statt.
+                </p>
+
+                <h3>2.4 Automatische Ersteinrichtung</h3>
+                <p>
+                    Beim ersten Start legt MidiRanger automatisch alle benötigten Dateien 
+                    und Unterordner an, sofern sie nicht bereits vorhanden sind. Dazu gehören:
+                </p>
+
+                <ul>
+                    <li>Die interne SQLite-Datenbank (<strong>data/midiranger.db</strong>)</li>
+                    <li>Die Einstellungsdatei (<strong>config/settings.json</strong>)</li>
+                    <li>Die Logdatei (<strong>logs/midiranger.log</strong>)</li>
+                    <li>Arbeitsordner unter <strong>midi/</strong> (z. B. uploads/, originals/)</li>
+                </ul>
+
+                <p>
+                    Nach der Ersteinrichtung kann MidiRanger sofort verwendet werden.
+                </p>
+
+                <h3>2.5 Erste Songs hinzufügen</h3>
+                <p>
+                    MidiRanger bietet zwei Möglichkeiten, um MIDI-Dateien zur Datenbank 
+                    hinzuzufügen. Beide Methoden führen zum gleichen Ergebnis, unterscheiden 
+                    sich jedoch im Arbeitsablauf.
+                </p>
+
+                <h4>1) Importieren über die Anwendung</h4>
+                <p>
+                    Über die Importfunktion können einzelne MIDI-Dateien direkt aus einem beliebigen 
+                    Verzeichnis ausgewählt werden. Beim Import werden die Dateien automatisch
+                    in den Ordner <strong>midi/uploads/</strong> kopiert und anschließend in die 
+                    Datenbank übernommen. Hierbei können Angaben über Titel, Interpret, Genre usw. direkt eingetragen werden.
+                </p>
+
+                <h4>2) Importieren über den Scanner</h4>
+                <p>
+                    Alternativ können mehrere MIDI-Dateien oder ganze Sammlungen über den Windows-Explorer direkt in das Arbeitsverzeichnis
+                    <strong>midi/</strong> abgelegt werden. Dabei können zusätzliche Unterordner zur Strukturierung verwendet werden. Das 
+                    Verzeichnis <strong>midi/originals/</strong> ist besonders für Original-Dateien geeignet. Dateien, die sich in diesem Ordner befinden,
+                    können später in der Anwendung nicht gelöscht werden. Dies verhindert das versehentliche Entfernen von Originaldateien.
+                </p>
+
+                <p>
+                    Nach dem Ablegen der Dateien kann der in MidiRanger integrierte Scanner unter dem Menüpunkt 
+                    <strong>Tools</strong> -> <strong>MIDI-Files scannen (F5)</strong> gestartet werden. Der Scanner durchsucht das gesamte Arbeitsverzeichnis nach 
+                    neuen MIDI-Dateien und fügt diese der Datenbank hinzu.
+                </p>
+
+                <p>
+                    <strong>Hinweis:</strong> Der Scanner setzt bei allen gefundenen MIDI-Dateien den Dateinamen als Titel. Alle hinzugefügten Songs müssen
+                    anschließend manuell bearbeitet werden, um Metadaten wie Interpret, Genre oder Album zu ergänzen bzw. korrekt zu setzen.
+                </p>
+            </section>
+
+            <section id="ui-overview">
+                <h2>3. Benutzeroberfläche</h2>
+
+                <h3>3.1 Allgemeiner Aufbau des Hauptfensters</h3>
+                <p>
+                    Nach dem Start von MidiRanger erscheint das Hauptfenster mit einer klar
+                    strukturierten Oberfläche. Der Bildschirm ist in drei Bereiche unterteilt:
+                </p>
+
+                <ul>
+                    <li><strong>Menüleiste</strong> – Hauptnavigation der Anwendung (oben)</li>
+                    <li><strong>Inhaltsbereich</strong> – zeigt je nach Bereich unterschiedliche Ansichten an</li>
+                    <li><strong>Statusleiste</strong> – zeigt Informationen zum aktuellen Audio-/MIDI-Ausgang</li>
+                </ul>
+
+                <p>
+                    Nach dem Start landet der Benutzer direkt auf dem <strong>Dashboard</strong>, 
+                    das verschiedene Statistiken über die eigene MIDI-Sammlung bereitstellt.
+                </p>
+
+                <h3>3.2 Das Dashboard</h3>
+                <p>
+                    Das Dashboard bietet einen schnellen und strukturierten Überblick über die wichtigsten Informationen der eigenen MIDI-Bibliothek. 
+                    Es ist in mehrere Informationsfelder unterteilt:
+                </p>
+
+                <ul>
+                    <li><strong>Songs gesamt</strong> – Anzahl aller in der Datenbank gespeicherten MIDI-Dateien</li>
+                    <li><strong>Playlists</strong> – Anzahl vorhandener Wiedergabelisten</li>
+                    <li><strong>Quellen</strong> – Anzahl der eingetragenen Quellen (z.&nbsp;B. Anbieter wie Midiland)</li>
+                    <li><strong>Audio-Backend</strong> – aktuell ausgewähltes MIDI-Ausgabegerät</li>
+                    <li><strong>Fehlende Dateien</strong> – Songs, deren Datei im Dateisystem nicht mehr gefunden wurde</li>
+                    <li><strong>Fehlende Metadaten</strong> – Songs ohne grundlegende Informationen (Titel, Interpret usw.)</li>
+                </ul>
+
+                <p>
+                    Unterhalb der Statistikfelder befinden sich zusätzliche Listen:
+                </p>
+
+                <ul>
+                    <li><strong>Zuletzt gespielt</strong> – die zuletzt abgespielten MIDI-Files</li>
+                    <li><strong>Zuletzt importiert</strong> – die zuletzt hinzugefügten Dateien</li>
+                    <li><strong>Top-Interpreten</strong> – am häufigsten vorkommende Interpreten in der Sammlung</li>
+                </ul>
+
+                <p>
+                    Mit der Schaltfläche <strong>Aktualisieren</strong> können die angezeigten
+                    Statistiken jederzeit neu geladen werden. Das Dashboard kann jederzeit über den Menüpunkt <strong>Ansicht → Dashboard</strong> aufgerufen werden.
+                </p>
+
+                <h3>3.3 Menüleiste</h3>
+                <p>
+                    Die Menüleiste am oberen Rand ist die zentrale Navigation der Anwendung.
+                    Von hier aus gelangen Sie zu allen Funktionen wie Import, Playlists,
+                    Einstellungen oder Tools. Eine ausführliche Beschreibung der Menüpunkte
+                    folgt in <strong>Kapitel 4: Menüleiste & Funktionen</strong>.
+                </p>
+
+                <h3>3.4 Statusleiste</h3>
+                <p>
+                    Die Statusleiste befindet sich am unteren Rand des Hauptfensters und ist in drei Bereiche unterteilt:
+                </p>
+
+                <ul>
+                    <li><strong>Links:</strong> Statusmeldungen der Anwendung 
+                        (z.&nbsp;B. Importvorgänge, Scanner-Meldungen, Hinweise oder Fehler)</li>
+
+                    <li><strong>Mitte:</strong> Player-Informationen, die nur angezeigt werden, 
+                        wenn ein Song abgespielt wird. (Songtitel, der Interpret, Stopp-Symbol)</li>
+
+                    <li><strong>Rechts:</strong> Der aktuell verwendete Audio- bzw. MIDI-Ausgang</li>
+                </ul>
+
+                <p>
+                    Die Statusleiste ist somit eine zentrale Informationsquelle, um den Zustand 
+                    der Anwendung während der Arbeit im Blick zu behalten.
+                </p>
+            </section>
+
+            <section id="menu">
+                <h2>4. Menüleiste & Funktionen</h2>
+
+                <p>
+                    Die Menüleiste befindet sich am oberen Rand des Hauptfensters und bietet
+                    Zugriff auf alle zentralen Funktionen von MidiRanger. Die Menüs sind in
+                    sechs Kategorien unterteilt: <strong>Datei</strong>, <strong>Bearbeiten</strong>, 
+                    <strong>Ansicht</strong>, <strong>Quellen</strong>, <strong>Playlist</strong>,
+                    <strong>Tools</strong> und <strong>Hilfe</strong>.
+                </p>
+
+                <h3>4.1 Datei</h3>
+                <p>Das Menü <strong>Datei</strong> enthält grundlegende Verwaltungsfunktionen.</p>
+
+                <ul>
+                    <li><strong>Importieren…</strong><br>
+                        Öffnet den Import-Dialog, mit dem MIDI-Files ausgewählt, 
+                        Metadaten eingetragen und anschließend zur Bibliothek hinzugefügt werden können.
+                    </li>
+
+                    <li><strong>Exportieren…</strong><br>
+                        Erstellt ein ZIP-Archiv mit den ausgewählten Songs und speichert es im vom Benutzer gewünschten Zielordner.
+                    </li>
+
+                    <li><strong>Backup erstellen…</strong><br>
+                        Erstellt eine Sicherungskopie des gesamten Programmverzeichnisses 
+                        (inklusive Datenbank, Konfigurationen, MIDI-Files, Logs und weiterer Dateien).
+                    </li>
+
+                    <li><strong>Einstellungen…</strong><br>
+                        Öffnet das Konfigurationsfenster. Folgende Bereiche können hier angepasst werden:
+                        <ul>
+                            <li>Standard-Exportpfad für ZIP-Dateien</li>
+                            <li>Theme-Auswahl (Design & Farben)</li>
+                            <li>Audio-Ausgabe (MIDI-Gerät / Backend)</li>
+                            <li>Lautstärke-Einstellungen</li>
+                            <li>Datenbank beim Programmstart automatisch prüfen</li>
+                            <li>MidiRanger im Vollbildmodus starten</li>
+                        </ul>
+                    </li>
+
+                    <li><strong>Beenden</strong><br>
+                        Schließt die Anwendung.
+                    </li>
+                </ul>
+
+                <h3>4.2 Bearbeiten</h3>
+                <p>
+                    Das Menü <strong>Bearbeiten</strong> enthält Funktionen, die sich auf 
+                    Songauswahl und Playlists beziehen.
+                </p>
+
+                <ul>
+                    <li><strong>Auswahl zurücksetzen</strong><br>
+                        Entfernt die Markierung <em>aller</em> ausgewählten Songs.
+                    </li>
+
+                    <li><strong>Zur Playlist hinzufügen</strong><br>
+                        Zeigt eine Liste aller vorhandenen Playlists an. Die ausgewählten Songs
+                        werden der gewählten Playlist hinzugefügt.
+                    </li>
+
+                    <li><strong>Aus Playlist entfernen</strong><br>
+                        Entfernt die aktuell ausgewählten Songs aus der momentan geöffneten Playlist.
+                        (Nur verfügbar, wenn eine Playlist angezeigt wird.)
+                    </li>
+
+                    <li><strong>Playlist leeren</strong><br>
+                        Entfernt alle Songs aus der aktuell geöffneten Playlist. 
+                        (Nur verfügbar, wenn eine Playlist angezeigt wird.)
+                    </li>
+                </ul>
+
+                <h3>4.3 Ansicht</h3>
+                <p>
+                    Das Menü <strong>Ansicht</strong> dient zum Wechseln zwischen den verschiedenen Ansichten der Anwendung.
+                </p>
+
+                <ul>
+                    <li><strong>Dashboard</strong><br>
+                        Öffnet das Dashboard mit Statistiken, zuletzt gespielten Titeln,
+                        zuletzt importierten Songs und weiteren Übersichtsdaten.
+                    </li>
+
+                    <li><strong>Alle Songs</strong><br>
+                        Zeigt die komplette Musikbibliothek in Tabellenform an.
+                    </li>
+
+                    <li><strong>Favoriten</strong><br>
+                        Zeigt alle Songs an, die als Favorit markiert wurden.
+                    </li>
+
+                    <li><strong>Suche</strong><br>
+                        Öffnet die Suchansicht, um Songs nach Titel, Interpret,
+                        Genre, Quelle oder weiteren Kriterien zu finden.
+                    </li>
+
+                    <li><strong>Vollbild (F11)</strong><br>
+                        Schaltet den Vollbildmodus ein oder aus.
+                    </li>
+                </ul>
+
+                <h3>4.4 Quellen</h3>
+                <p>
+                    Im Menü <strong>Quellen</strong> können Anbieter bzw. Herkunftsstellen 
+                    von MIDI-Dateien verwaltet werden (z.&nbsp;B. Midiland, HitBit, Roland).
+                </p>
+
+                <ul>
+                    <li><strong>Quellen verwalten…</strong><br>
+                        Öffnet den Quellen-Manager, um neue Quellen anzulegen, bestehende zu bearbeiten
+                        oder Einträge zu löschen.
+                    </li>
+                </ul>
+
+                <h3>4.5 Playlist</h3>
+                <p>
+                    Das Menü <strong>Playlist</strong> beinhaltet Verwaltungsfunktionen für 
+                    Wiedergabelisten.
+                </p>
+
+                <ul>
+                    <li><strong>Playlist verwalten…</strong><br>
+                        Öffnet den Playlist-Manager mit einer Übersicht aller Playlists sowie 
+                        Funktionen zum Erstellen, Umbenennen oder Löschen.
+                    </li>
+
+                    <li><strong>Meine Playlists</strong><br>
+                        Dynamisch generiertes Untermenü mit allen vorhandenen Playlists.
+                        Durch Auswählen eines Eintrags wird die jeweilige Playlist geöffnet.
+                    </li>
+                </ul>
+
+                <h3>4.6 Tools</h3>
+                <p>
+                    Das Menü <strong>Tools</strong> enthält zusätzliche Analyse- und 
+                    Wartungsfunktionen.
+                </p>
+
+                <ul>
+                    <li><strong>Metadaten-Analyse</strong><br>
+                        Analysiert ein oder mehrere ausgewählte MIDI-Files. Erfasst werden unter anderem:
+                        <ul>
+                            <li>Dauer</li>
+                            <li>BPM</li>
+                            <li>Taktart</li>
+                            <li>Tonart</li>
+                            <li>Spuren und Kanäle</li>
+                        </ul>
+                        Fehlende Metadaten werden automatisch ergänzt oder aktualisiert.
+                    </li>
+
+                    <li><strong>Datenbank prüfen</strong><br>
+                        Überprüft die Datenbank auf fehlende Dateien, verwaiste Einträge oder 
+                        andere Inkonsistenzen.
+                    </li>
+
+                    <li><strong>MIDI-Files scannen</strong><br>
+                        Durchsucht das gesamte Verzeichnis <code>midi/</code> nach neuen Dateien
+                        und übernimmt diese automatisch in die Datenbank.
+                    </li>
+
+                    <li><strong>Mixer öffnen</strong><br>
+                        Öffnet den Mixer zum Bearbeiten einzelner Spuren eines Songs.  
+                        Folgende Funktionen stehen dort zur Verfügung:
+                        <ul>
+                            <li>Spuren stumm schalten (Mute)</li>
+                            <li>Solo-Funktion</li>
+                            <li>Lautstärke pro Spur</li>
+                            <li>Panorama pro Spur</li>
+                            <li>Export als neuer MIDI-Song</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3>4.7 Hilfe</h3>
+                <p>
+                    Das Menü <strong>Hilfe</strong> bietet Zugriff auf Dokumentation, 
+                    Tastenkürzel, Logdateien sowie Informationen über die Anwendung.
+                </p>
+
+                <ul>
+                    <li><strong>Dokumentation</strong><br>
+                        Öffnet dieses Benutzerhandbuch.
+                    </li>
+
+                    <li><strong>Tastenkürzel</strong><br>
+                        Zeigt eine Übersicht aller verfügbaren Keyboard-Shortcuts.
+                    </li>
+
+                    <li><strong>Log anzeigen…</strong><br>
+                        Öffnet die aktuelle Logdatei (<code>logs/midiranger.log</code>) 
+                        zur Problemanalyse.
+                    </li>
+
+                    <li><strong>Über MidiRanger</strong><br>
+                        Zeigt Versionsinformationen, Hinweise zum Entwicklerteam sowie den Changelog der Anwendung.
+                    </li>
+                </ul>
+            </section>
+
+            <section id="songs-db">
+                <h2>5. Songs & Datenbank</h2>
+
+                <h3>5.1 Überblick</h3>
+                <p>
+                    Jeder Song in MidiRanger besteht aus zwei Elementen: dem Datenbankeintrag 
+                    (Metadaten wie Titel, Interpret, BPM usw.) und der eigentlichen MIDI-Datei 
+                    im Dateisystem. Beim Import oder Scannen wird ein neuer Datensatz erstellt 
+                    und mit dem Speicherort der Datei verknüpft. Weitere Details zum Import 
+                    finden sich in <strong>Kapitel 2</strong>.
+                </p>
+
+                <h3>5.2 Die Songtabelle</h3>
+                <p>
+                    Die Songtabelle bildet das zentrale Element der Ansichten 
+                    <strong>Alle Songs</strong>, <strong>Favoriten</strong> und 
+                    <strong>Playlist</strong>. Sie zeigt alle relevanten Metadaten in 
+                    Spaltenform an.
+                </p>
+
+                <h4>5.2.1 Spaltenübersicht</h4>
+                <ul>
+                    <li><strong>Auswahl</strong> – Checkbox zum Markieren eines Songs (für Export, Playlist oder Mehrfachaktionen).</li>
+                    <li><strong>Favorit</strong> – Herz-Icon zum Hinzufügen oder Entfernen eines Songs aus den Favoriten.</li>
+                    <li><strong>Titel</strong> – Songtitel.</li>
+                    <li><strong>Interpret</strong> – Hauptkünstler des Songs.</li>
+                    <li><strong>Genre</strong> – z.&nbsp;B. Rock, Pop, Schlager, Musical.</li>
+                    <li><strong>Dauer</strong> – Länge des Songs in Minuten und Sekunden.</li>
+                    <li><strong>BPM</strong> – erkannte oder manuell gesetzte Geschwindigkeit.</li>
+                    <li><strong>Tonart</strong> – automatisch ermittelt oder manuell gesetzt.</li>
+                    <li><strong>Takt</strong> – erkannte Taktart (z.&nbsp;B. 4/4, 3/4).</li>
+                    <li><strong>Quelle</strong> – Anbieter bzw. Herkunft des Songs (z.&nbsp;B. Midiland, EMP, HitBit).</li>
+                    <li><strong>Collection</strong> – optionaler Sammlungsname wie 
+                        „Midi Hits Nr. 12“, „Musicals“, „Tanzmusik Vol. 2“. Vorschlag erfolgt 
+                        automatisch aus der Ordnerstruktur.
+                    </li>
+                    <li><strong>Bearbeitet</strong> – zeigt an, ob der Song nachträglich verändert wurde.</li>
+                    <li><strong>Aktionen</strong> – Play-Button und Kontextmenü für weitere Funktionen.</li>
+                </ul>
+
+                <h4>5.2.2 Sortieren</h4>
+                <p>
+                    Jede Spalte der Songtabelle kann auf- oder absteigend sortiert werden. Dies gilt für alle Spalten, 
+                    einschließlich Auswahl- und Favoriten-Spalte. 
+                    Die Sortierung bleibt erhalten, wenn zwischen den Ansichten gewechselt und zur Tabelle zurückgekehrt wird.
+                </p>
+
+                <h4>5.2.3 Ansichtsabhängige Inhalte</h4>
+                <ul>
+                    <li><strong>Alle Songs</strong> – zeigt die vollständige Bibliothek.</li>
+                    <li><strong>Favoriten</strong> – zeigt nur Songs, die als Favorit markiert wurden.</li>
+                    <li><strong>Playlist</strong> – zeigt nur Songs der gewählten Playlist.</li>
+                </ul>
+
+                <h3>5.3 Aktionen & Kontextmenü</h3>
+                <p>
+                    Jeder Song verfügt über ein Play-Symbol zum direkten Abspielen sowie über ein 
+                    Kontextmenü (Rechtsklick oder Drei-Punkte-Menü), das zusätzliche Funktionen 
+                    bereitstellt:
+                </p>
+
+                <ul>
+                    <li><strong>Song bearbeiten…</strong><br>
+                        Öffnet den Bearbeitungsdialog für Metadaten wie Titel, Interpret, Genre, 
+                        BPM, Quelle und Collection.
+                    </li>
+
+                    <li><strong>Lyrics anzeigen…</strong><br>
+                        Öffnet ein eigenes Fenster, das den Inhalt der zugehörigen Lyrics-Datei 
+                        anzeigt. Von dort aus können die Lyrics gedruckt oder die Datei direkt im 
+                        Standard-Texteditor geöffnet werden.
+                    </li>
+
+                    <li><strong>Im Mixer öffnen…</strong><br>
+                        Öffnet den Mixer für diesen Song, um Spuren anzupassen, zu muten, 
+                        zu pannen oder einen neuen Mix zu exportieren.
+                    </li>
+
+                    <li><strong>Im Explorer öffnen…</strong><br>
+                        Öffnet den Ordner, in dem sich die MIDI-Datei befindet, und hebt die Datei hervor.
+                    </li>
+
+                    <li><strong>Löschen…</strong><br>
+                        Entfernt den Song aus der Datenbank sowie die MIDI-Datei und ggf. 
+                        vorhandene Lyrics-Dateien, sofern es sich nicht um eine Originaldatei handelt.
+                    </li>
+                </ul>
+
+                <h3>5.4 Song bearbeiten</h3>
+                <p>
+                    Der Bearbeitungsdialog ermöglicht das Ändern aller relevanten Metadaten eines 
+                    Songs. Folgende Felder stehen zur Verfügung:
+                </p>
+
+                <ul>
+                    <li><strong>Titel</strong> – Freitextfeld</li>
+                    <li><strong>Interpret</strong> – Freitextfeld</li>
+                    <li><strong>Genre</strong> – Freitextfeld</li>
+                    <li><strong>Quelle</strong> – Dropdown mit allen im Quellen-Manager angelegten Einträgen</li>
+                    <li><strong>Collection</strong> – automatisch vorgeschlagen, frei editierbar</li>
+                    <li><strong>BPM</strong> – automatisch ermittelt oder frei editierbar</li>
+                    <li><strong>Tonart</strong> – Dropdown-Liste mit allen Standard-Tonarten</li>
+                    <li><strong>Takt</strong> – Freitextfeld (z.&nbsp;B. „4/4“, „3/4“)</li>
+                    <li><strong>Melodie entfernt / bearbeitet</strong> – Checkbox zur Markierung manipulierter Dateien</li>
+                    <li><strong>Kommentar</strong> – Freitextfeld für Notizen (wird nicht in der Tabelle angezeigt)</li>
+                </ul>
+
+                <h4>Lyrics-Datei</h4>
+                <p>
+                    Im unteren Bereich des Dialogs wird angezeigt, ob eine Lyrics-Datei vorhanden 
+                    ist. Je nach Status wird entweder:
+                </p>
+
+                <ul>
+                    <li><strong>„Keine Lyrics-Datei vorhanden.“</strong> angezeigt oder</li>
+                    <li>der vollständige Pfad der gespeicherten Lyrics-Datei.</li>
+                </ul>
+
+                <p>
+                    Über die Schaltfläche <strong>Lyrics hinzufügen / ändern</strong> kann eine 
+                    Datei ausgewählt werden. Die Datei wird im Ordner 
+                    <code>midi/lyrics/</code> gespeichert und in der Datenbank hinterlegt.
+                </p>
+
+                <p>
+                    Änderungen werden sofort in der Datenbank gespeichert und in der Songtabelle 
+                    angezeigt.
+                </p>
+
+                <h3>5.5 Favoriten</h3>
+                <p>
+                    Über das Herz-Icon kann jeder Song als Favorit markiert oder aus den Favoriten 
+                    entfernt werden. Die Ansicht <strong>Favoriten</strong> filtert automatisch alle 
+                    Songs, die als Favorit markiert wurden.
+                </p>
+
+                <h3>5.6 Auswahl</h3>
+                <p>
+                    Die Checkbox dient zur Auswahl mehrerer Songs, z.&nbsp;B. zum Export oder zum 
+                    Hinzufügen zu einer Playlist. Die Auswahl wird beim Wechsel der Ansicht 
+                    automatisch zurückgesetzt.
+                </p>
+
+                <h3>5.7 Löschen von Songs</h3>
+
+                <h4>5.7.1 Normales Löschen</h4>
+                <p>
+                    Wenn ein Song gelöscht wird und sich die Datei nicht im Ordner 
+                    <code>midi/originals/</code> befindet, werden folgende Elemente entfernt:
+                </p>
+
+                <ul>
+                    <li>der Datenbankeintrag</li>
+                    <li>die MIDI-Datei</li>
+                    <li>die zugehörige Lyrics-Datei (falls vorhanden)</li>
+                </ul>
+
+                <h4>5.7.2 Geschützte Originaldateien</h4>
+                <p>
+                    Befindet sich die Datei im Ordner <code>midi/originals/</code>, verweigert 
+                    MidiRanger das Löschen. Es erscheint die Meldung:
+                </p>
+                <blockquote>
+                    <strong>„Original-MIDI-Dateien können nicht gelöscht werden.“</strong>
+                </blockquote>
+
+                <h3>5.8 Fehlende MIDI-Dateien</h3>
+                <p>
+                    Wenn die Option <strong>Datenbank beim Start automatisch prüfen</strong> in den 
+                    Einstellungen aktiviert ist, zeigt das Dashboard die Anzahl fehlender Dateien an. 
+                    Zum detaillierten Prüfen muss der Benutzer den Menüpunkt 
+                    <strong>Tools → Datenbank prüfen</strong> ausführen. 
+                    Fehlende Dateien werden in einer Liste angezeigt, einschließlich ihres 
+                    ursprünglichen Pfads (z.&nbsp;B. <code>uploads/song.mid</code>).
+                </p>
+
+                <p>
+                    Ein Hervorheben oder Markieren fehlender Songs direkt in der Songtabelle 
+                    erfolgt nicht.
+                </p>
+
+                <h3>5.9 Collections</h3>
+                <p>
+                    Collections dienen dazu, Songs einer bestimmten Disketten- oder 
+                    Themen-Sammlung zuzuordnen (z.&nbsp;B. „Midi Hits Nr. 12“, 
+                    „Musicals“, „Tanzmusik Vol.&nbsp;2“). 
+                    Wird ein Song aus einer Ordnerstruktur wie <code>midi/EMP/MidiHits Nr.12/</code> 
+                    importiert oder gescannt, schlägt MidiRanger automatisch „MidiHits Nr.12“ als 
+                    Collection vor. Der Wert kann im Bearbeitungsdialog frei angepasst werden.
+                </p>
+
+                <h3>5.10 Quellen</h3>
+                <p>
+                    Jeder Song kann über den Bearbeitungsdialog einem Eintrag aus dem 
+                    Quellen-Manager zugeordnet werden. Die Spalte <strong>Quelle</strong> zeigt 
+                    anschließend den Namen des Anbieters an (z.&nbsp;B. „Midiland“).
+                </p>
+
+                <h3>5.11 Suche</h3>
+                <p>
+                    Die Suchansicht ermöglicht das schnelle Auffinden von Songs anhand von 
+                    Kriterien wie Titel, Interpret, Genre, Quelle oder Collection. 
+                    Die Ergebnisse werden in einer separaten Tabelle angezeigt, die zwar das 
+                    gleiche Layout wie die Hauptbibliothek verwendet, jedoch ausschließlich die 
+                    Trefferliste enthält.
+                </p>
+            </section>
+
+            <section id="sources">
+                <h2>6. Quellen</h2>
+
+                <h3>6.1 Was sind Quellen?</h3>
+                <p>
+                    Quellen geben an, von welchem Anbieter oder Hersteller ein MIDI-File stammt 
+                    (z.&nbsp;B. Midiland, EMP, HitBit, Roland). Jede Datei kann genau einer Quelle 
+                    zugeordnet werden. Diese Information wird in der Songtabelle angezeigt und hilft 
+                    dabei, die eigene Sammlung übersichtlich nach Herkunft zu strukturieren.
+                </p>
+
+                <p>
+                    Beim ersten Start von MidiRanger wird automatisch die Standardquelle 
+                    <strong>„Unbekannt“</strong> angelegt. Diese wird vom Scanner verwendet, wenn 
+                    keine andere Quelle zugewiesen werden kann.  
+                    <strong>Hinweis:</strong> Die Quelle „Unbekannt“ kann nicht gelöscht werden.
+                </p>
+
+                <h3>6.2 Quelle hinzufügen</h3>
+                <p>
+                    Neue Quellen können im Quellen-Manager angelegt werden. Dies ist besonders 
+                    sinnvoll, wenn MIDI-Dateien von verschiedenen Herstellern stammen.
+                </p>
+                <p>
+                    Vorgehensweise:
+                </p>
+
+                <ul>
+                    <li>Öffnen Sie das Menü <strong>Quellen → Quellen verwalten…</strong></li>
+                    <li>Geben Sie den Namen der Quelle in das Textfeld ein (z.&nbsp;B. „Midiland“) und klicken Sie anschließend auf den Button <strong>Hinzufügen</strong></li>
+                    <li>Die Quelle wurde nun erstellt und Sie können das Fenster schließen.</li>
+                </ul>
+
+                <h3>6.3 Quelle bearbeiten</h3>
+                <p>
+                    Bestehende Quellen können jederzeit im Quellen-Manager umbenannt werden.  
+                    Änderungen wirken sich sofort auf alle Songs aus, die dieser Quelle 
+                    zugeordnet wurden.
+                </p>
+
+                <p>
+                    Vorgehensweise:
+                </p>
+
+                <ul>
+                    <li>Öffnen Sie das Menü <strong>Quellen → Quellen verwalten…</strong></li>
+                    <li>Markieren Sie in der angezeigten Liste die Quelle, die Sie umbenennen wollen durch einen Klick.</li>
+                    <li>Klicken Sie anschließend auf den Button <strong>Umbenennen</strong>. Es öffnet sich ein Dialogfenster. Tragen Sie hier den neuen Namen der Quelle ein.</li>
+                    <li>Bestätigen Sie die Eingabe mit <strong>OK</strong>. Die Quelle wurde nun umbenannt und Sie können das Fenster schließen.</li>
+                </ul>
+
+                <h3>6.4 Quelle löschen & Umbuchen von Songs</h3>
+                <p>
+                    Wird eine Quelle gelöscht und es existieren Songs, die dieser Quelle 
+                    zugeordnet sind, kann die Quelle nicht direkt entfernt werden.  
+                    Stattdessen erscheint ein Dialog zum <strong>Umbuchen</strong> dieser Songs.
+                </p>
+
+                <p>Der Dialog enthält:</p>
+                <ul>
+                    <li>ein Dropdown zur Auswahl der <strong>Zielquelle</strong></li>
+                    <li><strong>Umbuchen & Löschen</strong> – verschiebt alle betroffenen Songs und löscht anschließend die alte Quelle</li>
+                    <li><strong>Abbrechen</strong> – bricht den Vorgang ab</li>
+                </ul>
+
+                <p>
+                    Dies stellt sicher, dass niemals Songs ohne gültige Quelle existieren können.
+                </p>
+
+                <h4>Besonderheit: „Unbekannt“</h4>
+                <ul>
+                    <li>kann nicht gelöscht werden</li>
+                    <li>wird vom Scanner automatisch verwendet</li>
+                    <li>dient als sichere Standardquelle</li>
+                </ul>
+
+                <h3>6.5 Quelle einem Song zuweisen</h3>
+                <p>
+                    Die Quelle eines Songs wird beim Importieren und im Bearbeitungsdialog über ein Dropdown gewählt.  
+                    Songs, die beim Scannen automatisch erkannt wurden, erhalten zunächst die 
+                    Quelle „Unbekannt“ und können später manuell korrigiert werden.
+                </p>
+
+                <p>
+                    In der Songtabelle wird die gewählte Quelle in der Spalte 
+                    <strong>Quelle</strong> angezeigt.
+                </p>
+            </section>
+
+            <section id="playlists">
+                <h2>7. Playlisten</h2>
+
+                <h3>7.1 Was sind Playlisten?</h3>
+                <p>
+                    Playlisten dienen dazu, Songs thematisch oder nach persönlichen Vorlieben 
+                    zusammenzufassen. Im Gegensatz zu typischen Musikplayern wie Spotify 
+                    beeinflussen Playlisten in MidiRanger <strong>nicht</strong> die 
+                    Abspielreihenfolge, sondern sind lediglich Sammlungen von Songs. 
+                    Beispiele:
+                </p>
+
+                <ul>
+                    <li>„Lieblingslieder“</li>
+                    <li>„Schlager“</li>
+                    <li>„Hits von Midiland“</li>
+                    <li>„Interpret: ABBA“</li>
+                </ul>
+
+                <p>
+                    Jeder Song kann mehreren Playlisten zugeordnet werden, jedoch niemals mehrfach 
+                    in derselben Playlist.
+                </p>
+
+                <h3>7.2 Playlist erstellen</h3>
+                <p>
+                    Neue Playlisten werden im Playlist-Manager erstellt.
+                </p>
+
+                <p><strong>Vorgehensweise:</strong></p>
+                <ul>
+                    <li>Öffnen Sie das Menü <strong>Playlist → Playlist verwalten…</strong></li>
+                    <li>Geben Sie den Namen der Playlist in das Textfeld ein (z.&nbsp;B. „Schlager“) und klicken Sie anschließend auf den Button <strong>Hinzufügen</strong></li>
+                    <li>Die Playlist wurde nun erstellt und Sie können das Fenster schließen.</li>
+                </ul>
+
+                <p>
+                    Eine neue Playlist ist zunächst leer und kann sofort verwendet werden.
+                </p>
+
+                <h3>7.3 Songs zu einer Playlist hinzufügen</h3>
+                <p>
+                    Songs können aus jeder Ansicht (<strong>Alle Songs</strong>, 
+                    <strong>Favoriten</strong>, <strong>Suche</strong>) einer Playlist 
+                    hinzugefügt werden.
+                </p>
+
+                <p><strong>Vorgehensweise:</strong></p>
+
+                <ul>
+                    <li>Markieren Sie beliebig viele Songs über die Auswahl-Checkbox</li>
+                    <li>Öffnen Sie das Menü <strong>Bearbeiten → Zur Playlist hinzufügen</strong></li>
+                    <li>Wählen Sie die gewünschte Playlist aus dem Untermenü</li>
+                </ul>
+
+                <p>
+                    Die Zuordnung erfolgt <strong>sofort und ohne zusätzlichen Dialog</strong>.  
+                    Songs können nicht mehrfach in derselben Playlist vorkommen – doppelte Einträge 
+                    werden automatisch verhindert.
+                </p>
+
+                <h3>7.4 Playlist öffnen</h3>
+                <p>
+                    Playlisten werden über die Menüleiste geöffnet.  
+                    Vorgehensweise:
+                </p>
+
+                <ul>
+                    <li>Öffnen Sie das Menü <strong>Playlist → Meine Playlists</strong></li>
+                    <li>Klicken Sie im Untermenü auf die Playlist, die Sie anzeigen möchten</li>
+                </ul>
+
+                <p>
+                    Die gewählte Playlist wird anschließend in einer eigenen Tabellenansicht 
+                    dargestellt, die dieselben Spalten wie die Hauptbibliothek verwendet.
+                </p>
+
+                <h3>7.5 Playlist bearbeiten</h3>
+
+                <h4>7.5.1 Songs aus einer Playlist entfernen</h4>
+                <p>
+                    Um Songs aus einer Playlist zu entfernen:
+                </p>
+                <ul>
+                    <li>Stellen Sie sicher, dass Sie sich in der gewünschten Playlist befinden.</li>
+                    <li>Markieren Sie die gewünschten Titel</li>
+                    <li>Öffnen Sie das Menü <strong>Bearbeiten → Aus Playlist entfernen</strong></li>
+                </ul>
+
+                <p>
+                    Dies entfernt die Songs nur aus der Playlist – der Song selbst bleibt 
+                    vollständig in der Bibliothek erhalten.
+                </p>
+
+                <h4>7.5.2 Playlist leeren</h4>
+                <p>
+                    Um alle Songs aus einer Playlist zu entfernen:
+                </p>
+
+                <ul>
+                    <li>Stellen Sie sicher, dass Sie sich in der gewünschten Playlist befinden.</li>
+                    <li>Öffnen Sie das Menü <strong>Bearbeiten → Playlist leeren</strong></li>
+                </ul>
+
+                <p>
+                    Dies entfernt die Songs nur aus der Playlist – die Songs selbst bleiben 
+                    vollständig in der Bibliothek erhalten.
+                </p>
+
+                <h4>7.5.3 Playlist umbenennen</h4>
+                <p>
+                    Die Umbenennungsfunktion entspricht der Logik aus dem Quellen-Manager:
+                </p>
+
+                <ul>
+                    <li>Playlist im Playlist-Manager markieren</li>
+                    <li>Auf <strong>Umbenennen</strong> klicken</li>
+                    <li>Neuen Namen eingeben und mit <strong>OK</strong> bestätigen</li>
+                </ul>
+
+                <h3>7.6 Playlist löschen & Umbuchen von Songs</h3>
+                <p>
+                    Auch Playlisten können nicht gelöscht werden, solange Songs mit ihnen 
+                    verknüpft sind. Beim Löschen erscheint ein Dialogfenster, das der Logik 
+                    der Quellenverwaltung entspricht.
+                </p>
+
+                <p><strong>Der Dialog enthält:</strong></p>
+                <ul>
+                    <li>Ein Dropdown zur Auswahl der <strong>Zielplaylist</strong></li>
+                    <li><strong>Umbuchen & Löschen</strong> – verschiebt alle Titel in die gewählte Playlist und entfernt anschließend die alte Playlist</li>
+                    <li><strong>Abbrechen</strong> – beendet den Vorgang ohne Änderungen</li>
+                </ul>
+
+                <p>
+                    Playlisten können leer sein – z.&nbsp;B. direkt nach der Erstellung – und 
+                    lassen sich dann ohne Umbuchung löschen.
+                </p>
+
+                <h3>7.7 Hinweise zur Verwendung von Playlisten</h3>
+                <ul>
+                    <li>Die Reihenfolge der Songs kann nicht manuell geändert werden</li>
+                    <li>Playlisten dienen nicht zur Wiedergabesteuerung</li>
+                    <li>Ein Song kann in vielen Playlisten auftreten, aber nicht mehrfach in derselben</li>
+                    <li>Mehrfachauswahl beim Hinzufügen wird vollständig unterstützt</li>
+                    <li>Playliständerungen werden automatisch gespeichert</li>
+                </ul>
+            </section>
+
+            <section id="player">
+                <h2>8. Player & Audioausgabe</h2>
+
+                <h3>8.1 Überblick</h3>
+                <p>
+                    Der integrierte Player von MidiRanger dient dazu, MIDI-Dateien direkt aus der 
+                    Anwendung heraus anzuhören. Er ist bewusst einfach gehalten, da der Fokus auf 
+                    einer schnellen Vorschau liegt und nicht auf einer vollständigen Mediensteuerung 
+                    wie bei klassischen Audio-Playern.
+                </p>
+
+                <h3>8.2 Wiedergabe starten</h3>
+                <p>
+                    Ein Song kann über das <strong>Play-Symbol</strong> in der Songtabelle gestartet 
+                    werden. Sobald die Wiedergabe beginnt, ändert sich das Symbol des entsprechenden 
+                    Songs zu einem <strong>Stopp-Symbol</strong>. Gleichzeitig erscheint in der 
+                    Mitte der Statusleiste eine kompakte Anzeige mit:
+                </p>
+
+                <ul>
+                    <li>dem Titel des Songs</li>
+                    <li>dem Interpreten</li>
+                    <li>einem Stopp-Symbol</li>
+                </ul>
+
+                <p>
+                    Das Stopp-Symbol in der Statusleiste bietet eine zweite Möglichkeit, die 
+                    Wiedergabe zu beenden.
+                </p>
+
+                <h3>8.3 Wiedergabe stoppen</h3>
+                <p>
+                    Die Wiedergabe eines Songs kann jederzeit beendet werden:
+                </p>
+
+                <ul>
+                    <li>über das Stopp-Symbol in der <strong>Songtabelle</strong></li>
+                    <li>über das Stopp-Symbol in der <strong>Statusleiste</strong></li>
+                </ul>
+
+                <p>
+                    Darüber hinaus stoppt die Wiedergabe automatisch, wenn:
+                </p>
+
+                <ul>
+                    <li>zu einer anderen Ansicht gewechselt wird</li>
+                    <li>Aktionen wie Bearbeiten, Mixer öffnen oder Import durchgeführt werden</li>
+                    <li>ein neuer Song abgespielt wird</li>
+                </ul>
+
+                <p>
+                    Dies stellt sicher, dass keine Hintergrundwiedergabe erfolgt, wenn der Fokus des 
+                    Nutzers auf einer anderen Funktion des Programms liegt.
+                </p>
+
+                <h3>8.4 Audioausgabe</h3>
+                <p>
+                    MidiRanger verwendet intern <strong>FluidSynth</strong> zur Wiedergabe von 
+                    MIDI-Dateien. Das Programm wählt automatisch den bestmöglichen verfügbaren 
+                    Audio-Treiber des Systems (z.&nbsp;B. WASAPI oder DirectSound). 
+                    Die benötigte Soundfont-Datei ist vollständig in die Anwendung integriert und 
+                    wird beim Start automatisch geladen.
+                </p>
+
+                <h4>Lautstärke</h4>
+                <p>
+                    Die Lautstärke wird global über die Einstellungen festgelegt. Sie wirkt sich auf 
+                    alle Wiedergaben aus, einschließlich der Mixer-Ausgabe.
+                </p>
+
+                <h4>Aktiver Audio-/MIDI-Ausgang</h4>
+                <p>
+                    Der aktuell verwendete Audio-Ausgang wird auf dem Dashboard sowie im rechten Bereich der 
+                    Statusleiste angezeigt. Diese Anzeigen sind rein informativ und nicht anklickbar.
+                </p>
+
+                <h3>8.5 Verhalten bei fehlenden Dateien</h3>
+                <p>
+                    Wenn ein Song nicht wiedergegeben werden kann, etwa weil die Datei nicht mehr 
+                    vorhanden ist, erscheint in der Statusleiste eine entsprechende Fehlermeldung. 
+                    Zusätzlich wird der Fehler im Log vermerkt.
+                </p>
+
+                <p>
+                    In diesem Fall startet der Player nicht und kehrt sofort in den Ruhezustand zurück.
+                </p>
+
+                <h3>8.6 Besonderheiten des Players</h3>
+                <ul>
+                    <li>Der Player dient primär zur Vorschau von Songs.</li>
+                    <li>Es gibt keine Funktionen wie Pause, Positionsanzeige oder Vor-/Zurück.</li>
+                    <li>Beim Öffnen des Mixers wird die normale Wiedergabe gestoppt, da der Mixer über eine 
+                        eigene Wiedergabefunktion verfügt.</li>
+                    <li>
+                        Der Player ist bewusst minimalistisch gestaltet, um den Fokus auf das 
+                        Verwalten und Bearbeiten von MIDI-Dateien zu legen.
+                    </li>
+                </ul>
+            </section>
+
+            <section id="mixer">
+                <h2>9. Mixer</h2>
+
+                <h3>9.1 Überblick</h3>
+                <p>
+                    Der Mixer von MidiRanger ermöglicht das Anpassen einzelner MIDI-Kanäle eines Songs.
+                    Damit können Lautstärken, Panorama-Einstellungen oder bestimmte Instrumente gezielt
+                    geändert werden. Der Mixer eignet sich sowohl zur Analyse als auch zum Erstellen
+                    eigener Mix-Versionen eines Songs.
+                </p>
+
+                <h3>9.2 Öffnen des Mixers</h3>
+                <p>
+                    Der Mixer kann auf zwei Arten geöffnet werden. Voraussetzung ist, dass ein Song ausgewählt
+                    oder aufgerufen wurde.
+                </p>
+
+                <h4>Möglichkeit 1: Über die Songtabelle</h4>
+                <p>
+                    In der Songtabelle kann der Mixer direkt für einen bestimmten Song geöffnet werden:
+                </p>
+
+                <ul>
+                    <li>über das <strong>„…“-Menü</strong> in der Spalte „Aktionen“</li>
+                    <li>oder über einen <strong>Rechtsklick</strong> auf den Song</li>
+                </ul>
+
+                <p>In beiden Fällen wählen Sie anschließend den Eintrag:</p>
+                <p><strong>„Im Mixer öffnen…“</strong></p>
+
+                <h4>Möglichkeit 2: Über das Menü „Tools“</h4>
+                <p>
+                    Alternativ kann ein Song zuerst in der Tabelle markiert werden. Anschließend lässt sich der
+                    Mixer über die Menüleiste öffnen:
+                </p>
+
+                <ul>
+                    <li><strong>Tools → Mixer öffnen</strong></li>
+                </ul>
+
+                <p>
+                    Wird der Mixer über das Menü geöffnet, bezieht er sich auf den <strong>aktuell ausgewählten
+                    Song</strong>.
+                </p>
+
+                <p>
+                    Beim Öffnen stoppt MidiRanger automatisch jede laufende Wiedergabe, da der Mixer
+                    über eine eigene Vorschau-Funktion verfügt.
+                </p>
+
+                <h3>9.3 Aufbau der Mixer-Oberfläche</h3>
+                <p>
+                    Der Mixer zeigt pro vorhandenem MIDI-Kanal einen <strong>Channel-Strip</strong>.
+                    Nur Kanäle, die im Song tatsächlich verwendet werden, werden angezeigt.
+                </p>
+
+                <h4>Jeder Channel-Strip enthält:</h4>
+                <ul>
+                    <li><strong>Kanalnummer</strong> (z.&nbsp;B. „Ch 1“)</li>
+                    <li><strong>Instrumentname</strong>  
+                        (automatisch erkannt, inkl. Drumkits für Kanal 10)</li>
+                    <li><strong>Panorama-Regler</strong> (Links/Rechts, –64 bis +63)</li>
+                    <li><strong>Volume-Fader</strong> (0–127, Anzeige in dB)</li>
+                    <li><strong>Solo-Button</strong> (gelb)</li>
+                    <li><strong>Mute-Button</strong> (rot)</li>
+                </ul>
+
+                <h3>9.4 Funktionen der Kanalzüge</h3>
+
+                <h4>Panorama (Pan)</h4>
+                <p>
+                    Steuert die Position des Kanals im Stereo-Feld. Der Wert reicht von
+                    <strong>–64</strong> (ganz links) bis <strong>+63</strong> (ganz rechts).
+                </p>
+
+                <h4>Lautstärke (Volume)</h4>
+                <p>
+                    Die Lautstärke wird über einen vertikalen Schieberegler eingestellt.
+                    Der angezeigte dB-Wert wird automatisch berechnet.
+                </p>
+
+                <h4>Mute</h4>
+                <p>
+                    Blendet den Kanal vollständig aus. Der Button wird rot hervorgehoben, wenn
+                    er aktiviert ist.
+                </p>
+
+                <h4>Solo</h4>
+                <p>
+                    Hebt den Kanal hervor und blendet alle anderen aus.  
+                    Wenn mindestens ein Solo aktiv ist, werden nur die Solo-Kanäle wiedergegeben –
+                    dies entspricht dem Standardverhalten moderner DAWs.
+                </p>
+
+                <h3>9.5 Wiedergabe im Mixer</h3>
+                <p>
+                    Der Mixer verfügt über eigene Bedienelemente zur Vorschau des Songs:
+                </p>
+
+                <ul>
+                    <li><strong>Play</strong> – spielt den Song über den globalen Player ab</li>
+                    <li><strong>Stop</strong> – beendet die Vorschau</li>
+                </ul>
+
+                <p>
+                    Änderungen an Volume, Pan, Mute oder Solo werden während der Wiedergabe
+                    <strong>sofort hörbar</strong> umgesetzt.
+                </p>
+
+                <h3>9.6 Export eines Mixer-Edits</h3>
+                <p>
+                    Mit der Exportfunktion kann eine neue MIDI-Datei erzeugt werden, die alle
+                    vorgenommenen Mixer-Einstellungen enthält.
+                </p>
+
+                <p>Vorgehensweise:</p>
+                <ul>
+                    <li>Klicken Sie im Mixer auf <strong>Exportieren</strong></li>
+                    <li>Bestätigen Sie den Dialog <strong>„Mixer-Edit wirklich exportieren?“</strong></li>
+                </ul>
+
+                <p>
+                    Die Datei wird im Ordner <code>midi/mixer_output/</code> gespeichert und erhält
+                    automatisch einen neuen Namen:
+                </p>
+
+                <blockquote>
+                    <code>Originalname (Mixer Edit).mid</code>
+                </blockquote>
+
+                <p>
+                    Originaldateien bleiben immer unverändert.
+                </p>
+
+                <h3>9.7 Verhalten beim Schließen</h3>
+                <p>
+                    Wenn die Vorschau noch läuft, beendet MidiRanger die Wiedergabe automatisch.
+                    Weitere Aktionen werden nicht durchgeführt; das Verhalten ist bewusst schlicht
+                    gehalten, damit der Fokus auf der Arbeit mit den Spuren liegt.
+                </p>
+
+                <h3>9.8 Zusammenfassung</h3>
+                <ul>
+                    <li>16 mögliche Kanalzüge (nur genutzte Kanäle werden angezeigt)</li>
+                    <li>Live-Vorschau mit sofortiger Umsetzung der Regler</li>
+                    <li>Mute/Solo nach DAW-Standard</li>
+                    <li>Export von Mixer-Versionen als neue MIDI-Dateien</li>
+                    <li>Originaldateien bleiben immer erhalten</li>
+                </ul>
+            </section>
+
+            <section id="tools">
+                <h2>10. Tools</h2>
+
+                <p>
+                    Der Menüpunkt <strong>Tools</strong> bietet verschiedene Werkzeuge, 
+                    um Ihre MIDI-Bibliothek zu verwalten, zu bereinigen und zu erweitern.  
+                    Dazu gehören:
+                </p>
+
+                <ul>
+                    <li>Metadaten-Analyse</li>
+                    <li>Datenbank prüfen</li>
+                    <li>MIDI-Files scannen</li>
+                    <li>Mixer öffnen</li>
+                </ul>
+
+                <p>
+                    Die folgenden Unterkapitel erklären die Funktionen im Detail.
+                </p>
+
+                <h3>10.1 Metadaten-Analyse</h3>
+                <p>
+                    Mit der Metadaten-Analyse können fehlende oder unvollständige 
+                    Informationen eines Songs automatisch ergänzt werden.  
+                    MidiRanger liest dabei direkt aus der MIDI-Datei Werte wie:
+                </p>
+
+                <ul>
+                    <li>BPM (Tempo)</li>
+                    <li>Tonart</li>
+                    <li>Taktart</li>
+                    <li>Dauer</li>
+                    <li>Anzahl der Tracks & verwendete MIDI-Kanäle (für den Mixer)</li>
+                </ul>
+
+                <p>
+                    Die Analyse kann entweder für <strong>alle Songs mit fehlenden Daten</strong> 
+                    oder nur für <strong>ausgewählte Songs</strong> ausgeführt werden.
+                </p>
+
+                <h4>Vorgehensweise</h4>
+                <ul>
+                    <li>Optional: Markieren Sie einen oder mehrere Songs, die analysiert werden sollen.</li>
+                    <li>Öffnen Sie das Menü <strong>Tools → Metadaten-Analyse</strong></li>
+                    <li>Ein Dialog zeigt den Fortschritt sowie den aktuell verarbeiteten Song an.</li>
+                    <li>Nach Abschluss werden die aktualisierten Werte automatisch gespeichert.</li>
+                </ul>
+
+                <h4>Hinweis</h4>
+                <p>
+                    Wenn keine Songs ausgewählt wurden, analysiert MidiRanger alle Songs, 
+                    bei denen BPM, Tonart, Takt oder Dauer noch leer sind.
+                </p>
+
+                <h3>10.2 Datenbank prüfen</h3>
+                <p>
+                    Diese Funktion sucht nach <strong>Datenbankeinträgen, deren Datei nicht mehr existiert</strong>.
+                    Dies kann passieren, wenn Dateien außerhalb des Programms verschoben oder gelöscht wurden.
+                </p>
+
+                <h4>Geprüft wird:</h4>
+                <ul>
+                    <li>Existiert die in der Datenbank gespeicherte MIDI-Datei noch?</li>
+                    <li>Existiert eine zugeordnete Lyrics-Datei noch?</li>
+                </ul>
+
+                <h4>Vorgehensweise</h4>
+                <ul>
+                    <li>Öffnen Sie <strong>Tools → Datenbank prüfen</strong></li>
+                    <li>Das Programm durchsucht alle Songs und zeigt die fehlenden Dateien an.</li>
+                    <li>Wenn fehlende Songs gefunden wurden, haben Sie zwei Optionen:</li>
+                </ul>
+
+                <h4>Optionen im Dialog</h4>
+                <ul>
+                    <li>
+                        <strong>Löschen:</strong>  
+                        Entfernt den Datenbankeintrag sowie die zugehörige Lyrics-Datei (falls vorhanden).
+                    </li>
+                    <li>
+                        <strong>Markieren:</strong>  
+                        Der Song bleibt in der Datenbank, wird aber als „fehlend“ markiert und erscheint 
+                        im Dashboard in der Statistik „Fehlende Dateien“.
+                    </li>
+                </ul>
+
+                <h4>Sicherheit</h4>
+                <p>
+                    MidiRanger löscht ausschließlich Dateien innerhalb des Verzeichnisses
+                    <code>midi/</code>. Dateien außerhalb dieses Ordners werden niemals entfernt.
+                </p>
+
+                <h3>10.3 MIDI-Files scannen</h3>
+                <p>
+                    Der MIDI-Scanner durchsucht das gesamte Arbeitsverzeichnis 
+                    <code>midi/</code> rekursiv nach neuen MIDI-Dateien.  
+                    Unterstützt werden die Formate <strong>.mid</strong> und <strong>.midi</strong>.
+                </p>
+
+                <p>
+                    Diese Funktion ist ideal, wenn der Benutzer Dateien manuell in Ordner gelegt hat,
+                    etwa nach Herstellern, Kategorien oder eigenen Sammlungen.
+                </p>
+
+                <h4>Der Scanner erkennt:</h4>
+                <ul>
+                    <li><strong>neue Dateien</strong>, die noch nicht in der Datenbank sind</li>
+                    <li><strong>fehlende Dateien</strong>, die in der Datenbank stehen, aber nicht mehr existieren</li>
+                </ul>
+
+                <h4>Vorgehensweise</h4>
+                <ul>
+                    <li>Öffnen Sie <strong>Tools → MIDI-Files scannen</strong></li>
+                    <li>Der Scanner zeigt alle neu gefundenen Dateien an.</li>
+                    <li>Wenn neue Dateien vorliegen, erscheint eine Abfrage:</li>
+                </ul>
+
+                <blockquote>
+                    „Es wurden X neue Songs gefunden. Möchten Sie diese zur Datenbank hinzufügen?“
+                </blockquote>
+
+                <p>
+                    Wenn Sie bestätigen, beginnt der Importvorgang.
+                </p>
+
+                <h4>Importverhalten</h4>
+                <ul>
+                    <li>
+                        Titel = Dateiname (ohne .mid)  
+                    </li>
+                    <li>
+                        <strong>Collection</strong> = Name des Ordners, in dem die Datei liegt  
+                        (z.&nbsp;B. <code>midi/Midiland/Rock/</code> → Collection = „Rock“)
+                    </li>
+                    <li>
+                        Metadaten werden automatisch ausgelesen.
+                    </li>
+                    <li>
+                        Die Datei wird <strong>nicht kopiert</strong> – der bestehende Ordner bleibt unverändert.
+                    </li>
+                </ul>
+
+                <p>
+                    Nach Abschluss aktualisiert MidiRanger automatisch die aktuelle Ansicht.
+                </p>
+
+                <h3>10.4 Mixer öffnen</h3>
+                <p>  
+                    Über das Menü <strong>Tools → Mixer öffnen</strong> kann der Mixer für den
+                    aktuell ausgewählten Song geöffnet werden. Ein Öffnen ist nur möglich, wenn zuvor ein Song in der Tabelle markiert wurde.
+                </p>
+
+                <p>
+                    Alternativ ist die Funktion über das Kontextmenü („…“) in der Songtabelle erreichbar.
+                </p>
+
+                <p>
+                    Beim Öffnen des Mixers wird die Wiedergabe gestoppt, da Mixing und Playback nicht parallel laufen.
+                </p>
+
+                <p>
+                    Details zur Bedienung des Mixers finden sich im Kapitel <strong>9. Mixer</strong>.
+                </p>
+            </section>
+
+            <section id="settings">
+                <h2>11. Einstellungen</h2>
+
+                <p>
+                    Die Einstellungen von MidiRanger betreffen Aussehen, Audio-Ausgabe und das Verhalten 
+                    der Anwendung. <br>
+                    Sie werden über <strong>Datei → Einstellungen…</strong> geöffnet.
+                    Änderungen werden erst übernommen, wenn der Dialog mit 
+                    <strong>Speichern</strong> bestätigt wird. 
+                    <strong>Abbrechen</strong> oder das Schließen des Fensters verwirft alle Änderungen.
+                </p>
+
+                <h3>11.1 Allgemeine Einstellungen</h3>
+
+                <h4>Standard-Exportpfad</h4>
+                <p>
+                    Legt fest, in welchem Ordner ZIP-Exporte gespeichert werden. 
+                    Wird kein Pfad gesetzt, fragt MidiRanger bei jedem Export erneut nach einem Speicherort.
+                </p>
+
+                <h4>Theme</h4>
+                <p>
+                    MidiRanger unterstützt verschiedene visuelle Themes. Der Dialog zeigt die verfügbaren Themes als 
+                    Auswahl an. Änderungen wirken sofort als Vorschau, werden jedoch erst nach dem Speichern dauerhaft übernommen.
+                </p>
+
+                <h3>11.2 Audio-Einstellungen</h3>
+
+                <h4>Audio-Backend</h4>
+                <p>
+                    Hier wird festgelegt, welches interne MIDI-Backend für die Wiedergabe genutzt wird.
+                    MidiRanger stellt standardmäßig die folgenden Optionen bereit:
+                </p>
+
+                <ul>
+                    <li><strong>Fluidsynth</strong> – Standardeinstellung, Software-Synthesizer</li>
+                    <li><strong>Roland</strong> – Auswahl eines externen Roland-Geräts über MIDI-Ausgabe</li>
+                </ul>
+
+                <p>
+                    Die Backends werden unabhängig davon angezeigt, ob ein Roland-Gerät tatsächlich angeschlossen ist.
+                    Beim Speichern der Einstellung wird die Audio-Engine automatisch neu initialisiert.
+                </p>
+
+                <h4>Lautstärke</h4>
+                <p>
+                    Regelt die globale Wiedergabelautstärke des internen Players. 
+                    Der Wert (0–100%) wird direkt auf die Engine übertragen.
+                </p>
+
+                <h3>11.3 Verhalten</h3>
+
+                <h4>Datenbank beim Start automatisch prüfen</h4>
+                <p>
+                    Wenn aktiviert, überprüft MidiRanger beim Start, ob alle in der Datenbank registrierten
+                    MIDI-Dateien noch vorhanden sind. Das Ergebnis wird auf dem Dashboard angezeigt.
+                    Die eigentliche Verwaltung erfolgt über <strong>Tools → Datenbank prüfen</strong>.
+                </p>
+
+                <h4>Im Vollbildmodus starten</h4>
+                <p>
+                    Aktiviert den automatischen Start im Vollbildmodus. Diese Einstellung wirkt erst beim 
+                    nächsten Programmstart.
+                </p>
+
+                <h3>11.4 Werkseinstellungen</h3>
+                <p>
+                    Mit dem Button <strong>Werkseinstellungen</strong> werden alle Einstellungen auf die
+                    Standardwerte zurückgesetzt. Dazu gehören:
+                </p>
+
+                <ul>
+                    <li>Theme</li>
+                    <li>Audio-Backend</li>
+                    <li>Lautstärke</li>
+                    <li>Startoptionen</li>
+                    <li>Exportpfad</li>
+                </ul>
+
+                <p>
+                    Nach dem Zurücksetzen wird das Theme sofort aktualisiert und die Audio-Engine neu erzeugt.
+                </p>
+            </section>
+
+            <section id="statusbar">
+                <h2>12. Statusleiste & Fehlermeldungen</h2>
+
+                <p>
+                    Die Statusleiste befindet sich am unteren Rand des Hauptfensters und zeigt
+                    jederzeit wichtige Informationen zur aktuellen Aktion, zur Wiedergabe sowie
+                    zum Zustand der Anwendung an. Sie besteht aus mehreren Bereichen, die je nach
+                    Situation automatisch aktualisiert werden.
+                </p>
+
+                <h3>12.1 Aufbau der Statusleiste</h3>
+                <p>Die Statusleiste gliedert sich in folgende Abschnitte:</p>
+
+                <ul>
+                    <li><strong>Links:</strong> Statusmeldungen und Hinweise</li>
+                    <li><strong>Mitte:</strong> Player-Anzeige mit Titel, Interpret und Stop-Schaltfläche</li>
+                    <li><strong>Rechts:</strong> Aktuell verwendeter Audio-Ausgang (nur Anzeige)</li>
+                </ul>
+
+                <h3>12.2 Bereich links: Statusmeldungen</h3>
+                <p>
+                    In der linken Seite der Statusleiste erscheinen kurze Meldungen des Programms,
+                    etwa:
+                </p>
+
+                <ul>
+                    <li>„📝 Song bearbeitet“</li>
+                    <li>„📥 Song importiert“</li>
+                    <li>„🔍 Suche gestartet“</li>
+                    <li>„✅ Datenbankprüfung abgeschlossen“</li>
+                </ul>
+
+                <p>
+                    Diese Hinweise informieren über laufende Aktionen oder Ergebnisse von
+                    Werkzeugen wie Metadaten-Analyse oder Datenbankprüfung. Die Meldungen werden
+                    automatisch gesetzt und wieder ausgeblendet.
+                </p>
+
+                <h3>12.3 Bereich Mitte: Player-Anzeige</h3>
+                <p>
+                    Sobald ein Song abgespielt wird, erscheint im mittleren Bereich der Statusleiste:
+                </p>
+
+                <ul>
+                    <li><strong>Titel – Interpret</strong> des aktuellen Songs</li>
+                    <li>ein <strong>Stop-Button</strong> zum direkten Beenden der Wiedergabe</li>
+                </ul>
+
+                <p>
+                    Der Player-Bereich wird nur während der Wiedergabe angezeigt und verschwindet,
+                    sobald der Song beendet oder gestoppt wird.
+                </p>
+
+                <h3>12.4 Bereich rechts: Audio-Ausgang</h3>
+                <p>
+                    Rechts in der Statusleiste wird das aktuell verwendete Audio-Backend angezeigt,
+                    z.&nbsp;B.:
+                </p>
+
+                <ul>
+                    <li>„Fluidsynth“ (Standard)</li>
+                    <li>„Roland“ (falls ausgewählt und verfügbar)</li>
+                </ul>
+
+                <p>
+                    Dieser Bereich ist ausschließlich informativ und nicht anklickbar.
+                </p>
+
+                <h3>12.5 Fehlermeldungen</h3>
+                <p>
+                    Wenn eine Aktion nicht ausgeführt werden kann oder ein Problem auftritt,
+                    informiert MidiRanger über:
+                </p>
+
+                <ul>
+                    <li>eine Fehlermeldung in der Statusleiste</li>
+                    <li>einen zusätzlichen Hinweisdialog (falls nötig)</li>
+                    <li>einen Eintrag im Logfile</li>
+                </ul>
+
+                <p>Typische Fehlermeldungen sind:</p>
+                <ul>
+                    <li>„⚠️ Kein Eintrag ausgewählt"</li>
+                    <li>„⚠️ Keine MIDI-Dateien gefunden“</li>
+                    <li>„❌ Löschen nicht erlaubt (Originaldatei)“</li>
+                    <li>„⚠️ Fehler beim Abspielen“</li>
+                </ul>
+
+                <h3>12.6 Log-Datei & Log-Ansicht</h3>
+                <p>
+                    MidiRanger protokolliert alle wichtigen Ereignisse, Warnungen und Fehler in einer 
+                    Logdatei. Diese wird automatisch beim Programmstart fortgeführt und ist ein 
+                    wertvolles Werkzeug zur Fehlersuche.
+                </p>
+
+                <p><strong>Speicherort der Logdatei:</strong></p>
+                <pre><code>logs/midiranger.log</code></pre>
+
+                <h4>Log-Ansicht im Programm</h4>
+                <p>
+                    Über das Menü <strong>Hilfe → Log anzeigen...</strong> kann der integrierte 
+                    Log-Viewer geöffnet werden. Dieser erlaubt das komfortable Durchsehen und Filtern 
+                    der aktuellen Session.
+                </p>
+
+                <p>Die Log-Ansicht bietet folgende Funktionen:</p>
+
+                <ul>
+                    <li><strong>Farbliche Hervorhebung nach Meldungstyp:</strong>
+                        <ul>
+                            <li><span style="color:#339966">INFO</span> – grün</li>
+                            <li><span style="color:#e6a800">WARNUNG</span> – gelb</li>
+                            <li><span style="color:#ff3366">ERROR</span> – rot</li>
+                            <li><span style="color:#3388cc">DEBUG</span> – blau</li>
+                            <li>NORMAL – Standardfarbe des Themes</li>
+                        </ul>
+                    </li>
+
+                    <li><strong>Filterleiste mit fünf Modi:</strong>
+                        <ul>
+                            <li><strong>NORMAL</strong> – zeigt alle Meldungen außer DEBUG</li>
+                            <li><strong>INFO</strong> – nur Informationsmeldungen</li>
+                            <li><strong>WARNUNG</strong> – nur Warnungen</li>
+                            <li><strong>FEHLER</strong> – nur Fehler</li>
+                            <li><strong>DEBUG</strong> – zeigt alle Einträge ungefiltert</li>
+                        </ul>
+                    </li>
+
+                    <li><strong>„Aktualisieren“-Button:</strong> Lädt die Logdatei neu, ohne den Dialog zu schließen.</li>
+
+                    <li><strong>„Im Editor öffnen“-Button:</strong> Öffnet die Logdatei im Standard-Texteditor des Systems.</li>
+
+                    <li><strong>Scrollt automatisch ans Ende</strong> beim Laden neuer Einträge.</li>
+                </ul>
+
+                <p>
+                    Die Log-Ansicht ist ein wichtiges Werkzeug für die Fehlersuche und bietet erheblich
+                    mehr Informationen, als über die kurzen Statusmeldungen sichtbar ist.
+                </p>
+            </section>
+
+            <section id="changelog">
+                <h2>13. Versionen & Changelog</h2>
+                <p>
+                    MidiRanger zeigt alle relevanten Informationen zur aktuell installierten Version direkt
+                    im Programm an. Ein separates Changelog im Handbuch ist daher nicht erforderlich.
+                </p>
+
+                <h3>13.1 Über MidiRanger</h3>
+                <p>
+                    Im Menü <strong>Hilfe → Über MidiRanger</strong> finden Sie:
+                </p>
+
+                <ul>
+                    <li>die aktuell installierte Versionsnummer</li>
+                    <li>Informationen zum Entwickler</li>
+                    <li>Lizenz- und Copyright-Hinweise</li>
+                </ul>
+
+                <h3>13.2 Changelog anzeigen</h3>
+                <p>
+                    Über die Schaltfläche <strong>„Changelog anzeigen“</strong> im Dialog 
+                    <strong>Über MidiRanger</strong> öffnen Sie die vollständige Versionshistorie.
+                    Das Changelog wird mit zukünftigen Updates automatisch erweitert.
+                </p>
+            </section>
+
+            <p class="doc-back-to-top"><a href="#top">Zurück nach oben ↑</a></p>
+        </main>
+    </div>
+
+</body>
+</html>

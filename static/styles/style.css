@@ -1,0 +1,1055 @@
+* { box-sizing: border-box; }
+
+/* Ohne dies gewinnt jede eigene "display"-Regel (z.B. .mr-modal-actions
+   { display: flex }) gegen das hidden-Attribut, weil beide Autoren-CSS
+   sind und das Attribut allein keine höhere Prio hat - Elemente mit
+   [hidden] blieben dann trotzdem sichtbar. */
+[hidden] { display: none !important; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--theme-bg);
+    color: var(--theme-content-text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 16px;
+}
+
+body { display: flex; flex-direction: column; min-height: 100vh; }
+
+a { color: var(--theme-link-color); text-decoration: none; }
+a:hover { color: var(--theme-link-hover-color); text-decoration: underline; }
+
+h1 { font-size: 1.6rem; margin: 0 0 1.25rem; }
+h2 { font-size: 1.1rem; margin: 1.5rem 0 0.75rem; opacity: 0.75; }
+
+/* -------------------------------------------------------------
+   Menüleiste: entspricht der nativen QMenuBar des Originals -
+   bewusst NEUTRAL (kein Theme-Akzent), genau wie im Original.
+   ------------------------------------------------------------- */
+.menubar {
+    display: flex;
+    align-items: stretch;
+    background: #f0f0f0;
+    color: #000;
+    border-bottom: 1px solid #d0d0d0;
+    flex-wrap: wrap;
+    font-size: 13px;
+}
+
+.menu { position: relative; }
+
+.menu summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 4px 8px;
+    user-select: none;
+}
+
+.menu summary::-webkit-details-marker { display: none; }
+
+.menu[open] summary,
+.menu summary:hover {
+    background: #d0d0d0;
+}
+
+.menu-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 20;
+    min-width: 220px;
+    background: #f8f8f8;
+    border: 1px solid #d0d0d0;
+    display: flex;
+    flex-direction: column;
+    padding: 4px 0;
+}
+
+.menu-dropdown a,
+.menu-dropdown button,
+.menu-disabled {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    width: 100%;
+    text-align: left;
+    padding: 4px 24px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    color: #000;
+    font: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.menu-shortcut { opacity: 0.55; font-size: 0.9em; }
+
+.menu-dropdown a:hover,
+.menu-dropdown button:hover {
+    background: #d0d0d0;
+    color: #000;
+    text-decoration: none;
+}
+
+.menu-disabled { color: rgba(0, 0, 0, 0.35); cursor: default; }
+
+.menu-dropdown hr {
+    border: none;
+    height: 1px;
+    background: #e0e0e0;
+    margin: 4px 8px;
+}
+
+/* Untermenü, das seitlich aufklappt (Pendant zu QMenu.addMenu(), z.B.
+   "Meine Playlists"). Klick/Tap statt reinem Hover, damit es auch auf dem
+   Tablet funktioniert. */
+.menu-has-submenu { position: relative; }
+
+.menu-submenu {
+    display: none;
+    position: absolute;
+    top: -4px;
+    left: 100%;
+    z-index: 21;
+    min-width: 200px;
+    background: #f8f8f8;
+    border: 1px solid #d0d0d0;
+    flex-direction: column;
+    padding: 4px 0;
+}
+
+.menu-has-submenu.open > .menu-submenu { display: flex; }
+
+/* Original: root.setContentsMargins(16,16,16,16) auf der vollen Fensterbreite -
+   kein zentrierter/eingeengter Inhaltsbereich. */
+.page {
+    flex: 1;
+    width: 100%;
+    padding: 16px;
+}
+
+/* -------------------------------------------------------------
+   Statusleiste: entspricht MRStatusBar (unten, Theme-Akzent,
+   3 Slots: Meldungen / Player / Output).
+   ------------------------------------------------------------- */
+.statusbar {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 2px 1rem;
+    background: var(--theme-accent);
+    color: var(--theme-button-text);
+    font-size: 12px;
+}
+
+.statusbar-slot { display: flex; align-items: center; gap: 0.5rem; }
+.statusbar-left, .statusbar-right { flex: 1; }
+.statusbar-center { justify-content: center; }
+
+/* AudioOutputWidget/PlayerWidget setzen im Original ein EIGENES
+   setStyleSheet("font-weight: bold;") auf ihr Label - das kappt in Qt die
+   Vererbung von "color" aus dem QStatusBar-Stylesheet, das Label fällt auf
+   die Standard-Palette (Schwarz) zurück. Nur das linke, stylesheet-lose
+   Meldungs-Label erbt tatsächlich button_text (Weiß).*/
+.statusbar-right, .statusbar-title { color: #000; font-weight: bold; }
+.statusbar-right { justify-content: flex-end; text-align: right; }
+
+.statusbar-stop-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.statusbar-stop-btn img { width: 16px; height: 16px; }
+
+/* -------------------------------------------------------------
+   Dashboard: entspricht home_view.py (_card/_list) - bewusst
+   IMMER weiß/schwarz, unabhängig vom Theme (wie im Original).
+   ------------------------------------------------------------- */
+.dashboard-title-row { display: flex; justify-content: center; }
+
+/* root.setSpacing(12) im Original gilt einheitlich zwischen ALLEN Abschnitten
+   (Titel, Aktualisieren-Zeile, Karten-Grid, Listen) - hier durchgängig 12px. */
+.dashboard-title {
+    color: var(--theme-home-title-text);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.75rem;
+}
+
+.dashboard-controls { display: flex; justify-content: flex-end; margin-bottom: 0.75rem; }
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+/* Original: root ist ein QVBoxLayout in einem maximierten Fenster, die
+   Listenreihe (mid) bekommt dadurch den gesamten restlichen Platz. Damit das
+   im Web genauso wirkt, wird die Dashboard-Seite selbst zur Flex-Spalte und
+   die Listenreihe füllt den Rest der Viewport-Höhe. */
+.dashboard-page { display: flex; flex-direction: column; }
+
+.dashboard-lists {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    min-height: 240px;
+}
+
+.mr-card, .mr-list-box {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    padding: 0.75rem;
+}
+
+.mr-list-box { display: flex; flex-direction: column; }
+
+.mr-card-title { font-size: 0.75rem; font-weight: 600; color: #000; opacity: 0.8; }
+.mr-card-value { font-size: 1.5rem; font-weight: 700; color: #111; margin-top: 0.25rem; }
+
+.mr-list-title { font-weight: 600; color: #000; margin-bottom: 0.5rem; }
+.mr-list { list-style: none; margin: 0; padding: 0; color: #111; font-size: 0.9rem; }
+.mr-list li { padding: 0.15rem 0; }
+.mr-list-empty {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    text-align: center;
+    opacity: 0.7;
+    font-size: 0.75rem;
+    color: #000;
+}
+
+@media (max-width: 720px) {
+    .dashboard-grid, .dashboard-lists { grid-template-columns: 1fr; }
+}
+
+/* -------------------------------------------------------------
+   Generische Formulare (Settings, Login) - Bereiche ohne
+   Original-Entsprechung, daher dezent theme-getönt statt geraten.
+   ------------------------------------------------------------- */
+form { display: flex; flex-direction: column; gap: 1rem; max-width: 440px; }
+
+label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+    opacity: 0.85;
+}
+
+input, select, button {
+    font: inherit;
+    padding: 0.65rem 0.75rem;
+    border-radius: 8px;
+    border: 1px solid var(--theme-border);
+    background: var(--theme-input-bg);
+    color: var(--theme-content-text);
+}
+
+input[type="range"] { padding: 0; accent-color: var(--theme-accent); }
+
+/* Entspricht widgets/button.py (MRButton) exakt: padding 6px 12px,
+   font-size 14px, radius 6px - nicht die 16px-Formularschrift. */
+button {
+    cursor: pointer;
+    background: var(--theme-button-color);
+    border-color: var(--theme-button-color);
+    color: var(--theme-button-text);
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 6px;
+    align-self: flex-start;
+    padding: 6px 12px;
+}
+
+button:hover {
+    background: var(--theme-button-hover-color);
+    border-color: var(--theme-button-hover-color);
+    color: var(--theme-button-hover-text);
+}
+
+.hint { font-size: 0.8rem; opacity: 0.65; margin: -0.5rem 0 0; }
+.notice { color: #4fd18b; }
+.error { color: #ff6b6b; }
+
+.test-section { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--theme-border); }
+
+/* -------------------------------------------------------------
+   Login (entspricht dem Splashscreen der Desktop-App: theme.bg
+   als Hintergrund, großes Theme-Logo, Copyright in splash_text)
+   ------------------------------------------------------------- */
+.login-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--theme-bg);
+}
+
+.login-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+}
+
+.login-logo {
+    display: block;
+    max-width: 260px;
+    width: 100%;
+    height: auto;
+    margin: 0 auto 2.5rem;
+}
+
+.login-card h2 { color: var(--theme-splash-text); margin: 0 0 0.5rem; opacity: 0.85; }
+
+.login-card form {
+    text-align: left;
+    margin: 1.25rem auto 0;
+    background: var(--theme-surface);
+    border: 1px solid var(--theme-border);
+    border-radius: 14px;
+    padding: 1.5rem;
+}
+
+.login-card button { align-self: stretch; text-align: center; padding: 0.65rem 1.5rem; font-size: 1rem; }
+
+.login-footer {
+    text-align: center;
+    padding: 1rem;
+    color: var(--theme-splash-text);
+    opacity: 0.6;
+    font-size: 0.8rem;
+}
+
+/* -------------------------------------------------------------
+   Modale Dialoge (entspricht QDialog: Fenster-bg = theme.bg,
+   Inhaltsfläche weiß mit border-radius/border, Titel in
+   home_title_text, "Schließen"-Button)
+   ------------------------------------------------------------- */
+.mr-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.mr-modal-overlay.open { display: flex; }
+
+.mr-modal {
+    width: min(900px, 92vw);
+    height: min(640px, 88vh);
+    padding: 20px;
+    border-radius: 10px;
+    background: var(--theme-bg);
+    color: var(--theme-content-text);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.mr-modal-title {
+    margin: 0 0 4px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--theme-home-title-text);
+}
+
+.mr-modal-frame {
+    flex: 1;
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid var(--theme-border);
+    border-radius: 8px;
+}
+
+.mr-modal-actions { display: flex; justify-content: center; gap: 10px; }
+
+/* Original nutzt hier keinen ThemeManager - neutraler Dialog wie
+   shortcuts_dialog.py (Standard-Qt-Grau, kein Akzent). */
+.mr-modal-plain {
+    background: #f0f0f0;
+    color: #000;
+}
+
+.mr-modal-title-plain {
+    text-align: left;
+    font-size: 18px;
+    font-weight: 600;
+    color: #000;
+}
+
+.mr-modal-table-wrap { flex: 1; overflow: auto; border: 1px solid #c0c0c0; }
+
+.mr-shortcuts-table { width: 100%; border-collapse: collapse; background: #ffffff; }
+
+.mr-shortcuts-table th {
+    position: sticky;
+    top: 0;
+    background: #e4e4e4;
+    text-align: left;
+    padding: 6px 10px;
+    border-bottom: 1px solid #c0c0c0;
+}
+
+.mr-shortcuts-table td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.mr-shortcuts-table td:last-child { text-align: center; }
+
+.mr-modal-actions-right { justify-content: flex-end; }
+
+.mr-btn-plain {
+    background: #e4e4e4;
+    border-color: #b0b0b0;
+    color: #000;
+    font-weight: normal;
+}
+
+.mr-modal-import button.mr-btn-plain,
+.mr-modal-settings button.mr-btn-plain,
+.mr-modal-backup button.mr-btn-plain,
+.mr-modal-tool button.mr-btn-plain,
+.mr-modal-mixer button.mr-btn-plain {
+    padding: 1px 8px;
+    font-size: 13px;
+    border-radius: 0;
+}
+
+.mr-btn-plain:hover { background: #d0d0d0; border-color: #a0a0a0; color: #000; }
+
+/* -------------------------------------------------------------
+   Log-Viewer (entspricht log_view.py: MRButtonToggle-Filter,
+   weißes Textfeld mit Konsolen-Schrift, pro Zeile eingefärbt).
+   ------------------------------------------------------------- */
+.mr-log-filters { display: flex; gap: 10px; }
+
+.mr-toggle-btn {
+    flex: 1;
+    background: var(--theme-alternate-bg);
+    color: var(--theme-home-title-text);
+    border: 1px solid var(--theme-border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.mr-toggle-btn:hover {
+    background: var(--theme-button-hover-color);
+    color: var(--theme-button-hover-text);
+}
+
+.mr-toggle-btn.active {
+    background: var(--theme-button-color);
+    color: var(--theme-button-text);
+    border-color: var(--theme-accent);
+}
+
+.mr-log-filename { text-align: center; margin: 0; }
+
+.mr-log-content {
+    flex: 1;
+    overflow: auto;
+    background: #ffffff;
+    color: var(--theme-text);
+    border: 1px solid var(--theme-border);
+    border-radius: 8px;
+    padding: 10px;
+    font-family: Consolas, monospace;
+    font-size: 13px;
+    white-space: pre-wrap;
+}
+
+.log-line.log-error { color: #ff3366; }
+.log-line.log-warn { color: #e6a800; }
+.log-line.log-info { color: #339966; }
+.log-line.log-debug { color: #3388cc; }
+.log-line.log-header { font-style: italic; font-weight: bold; }
+
+.mr-modal-actions-split { justify-content: space-between; }
+.mr-modal-actions-split > div { display: flex; gap: 10px; }
+
+/* -------------------------------------------------------------
+   Über MidiRanger! / Changelog (entspricht about_dialog.py /
+   changelog_dialog.py: theme.bg, home_title_text/splash_text,
+   zentrierter Inhalt).
+   ------------------------------------------------------------- */
+.mr-modal-title-lg {
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    color: var(--theme-home-title-text);
+    margin: 0;
+}
+
+.mr-about { width: min(600px, 92vw); height: auto; max-height: 88vh; align-items: center; text-align: center; }
+
+.mr-about-logo { max-width: 180px; width: 100%; height: auto; }
+
+.mr-about-subtitle { margin: 0; font-size: 15px; color: var(--theme-home-title-text); text-align: center; }
+
+.mr-about-copyright { margin: 8px 0 0; font-size: 13px; color: var(--theme-home-title-text); }
+
+.mr-about-link { margin: 0; }
+.mr-about-link a { font-size: 14px; color: var(--theme-link-color); text-decoration: underline; }
+.mr-about-link a:hover { color: var(--theme-link-hover-color); }
+
+.mr-about-info { margin: 0; font-size: 12px; color: var(--theme-home-title-text); }
+
+.mr-about .mr-modal-actions { margin-top: 14px; }
+
+.mr-changelog-content {
+    background: #ffffff;
+    color: var(--theme-text);
+    border: 2px solid var(--theme-border);
+    padding: 10px;
+    font-size: 14px;
+    overflow: auto;
+    white-space: pre-wrap;
+    text-align: left;
+}
+
+/* -------------------------------------------------------------
+   Import-Formular (entspricht import_song_dialog.py).
+   ------------------------------------------------------------- */
+.import-form { max-width: 650px; }
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+}
+
+.file-pick-row { display: flex; gap: 0.5rem; }
+.file-pick-row input { flex: 1; }
+.file-pick-row button { white-space: nowrap; }
+
+.checkbox-label { flex-direction: row; align-items: center; gap: 0.5rem; }
+.checkbox-label input { width: auto; }
+
+.import-form-actions { display: flex; gap: 0.75rem; align-items: center; justify-content: flex-end; }
+
+.mr-btn-plain-link {
+    display: inline-block;
+    background: #e4e4e4;
+    border: 1px solid #b0b0b0;
+    color: #000;
+    font-weight: normal;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 1px 8px;
+    font-size: 13px;
+    border-radius: 0;
+}
+.mr-btn-plain-link:hover { text-decoration: none; background: #d0d0d0; border-color: #a0a0a0; color: #000; }
+
+.mr-modal-import {
+    width: min(650px, 92vw);
+    height: auto;
+    max-height: 95vh;
+    padding-top: 8px;
+}
+
+/* Original (BaseSongForm) hat EINE gleichmäßige Spacing von 10px zwischen
+   ALLEN Widgets (Label, Feld, nächstes Label, ...) - flache Struktur statt
+   Label-umschließt-Feld, damit der Rhythmus wirklich gleichmäßig ist. */
+.mr-modal-import .import-form {
+    max-width: none;
+    overflow-y: auto;
+    padding-right: 4px;
+    gap: 10px;
+}
+
+.mr-modal-import label {
+    display: block;
+    color: #000;
+    opacity: 0.85;
+    font-size: 0.85rem;
+}
+
+.mr-modal-import .checkbox-label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* Original nutzt hier unveränderte, native Qt-Widgets (kein ThemeManager,
+   kein MRButton) - so nah wie möglich an ungestylten Browser-Standardfeldern
+   statt eigenem Padding/Radius/Farben. */
+.mr-modal-import input,
+.mr-modal-import select,
+.mr-modal-import textarea {
+    background: #ffffff;
+    color: #000;
+    border: 1px solid #7a7a7a;
+    border-radius: 0;
+    padding: 1px 2px;
+    font-size: 13px;
+}
+
+/* -------------------------------------------------------------
+   Backup (entspricht backup_dialog.py: plain, Fortschrittsbalken,
+   2 Buttons links, 1 Button rechts).
+   ------------------------------------------------------------- */
+.mr-modal-backup { width: min(440px, 92vw); height: auto; padding-top: 8px; }
+
+.mr-progress-row { display: flex; align-items: center; gap: 8px; }
+
+.mr-progress-track {
+    flex: 1;
+    height: 33px;
+    background: #ffffff;
+    border: 1px solid #7a7a7a;
+    overflow: hidden;
+}
+
+.mr-progress-fill { height: 100%; background: #4a90d9; transition: width 0.3s ease; }
+
+.mr-progress-percent { flex: 0 0 auto; min-width: 36px; text-align: right; font-size: 13px; color: #000; }
+
+/* -------------------------------------------------------------
+   Settings (entspricht settings_dialog.py: QGroupBox-Sektionen,
+   QFormLayout Label|Feld nebeneinander statt gestapelt).
+   ------------------------------------------------------------- */
+.mr-modal-settings {
+    width: min(700px, 92vw);
+    height: auto;
+    max-height: 95vh;
+    overflow-y: auto;
+    padding-top: 8px;
+}
+
+.mr-modal-settings #settingsForm { display: flex; flex-direction: column; gap: 16px; max-width: none; }
+
+.mr-groupbox {
+    border: 1px solid #a0a0a0;
+    border-radius: 4px;
+    margin: 0;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.mr-groupbox legend { padding: 0 6px; color: #000; font-size: 13px; }
+
+.mr-groupbox-checkboxes { flex-direction: column; }
+
+.mr-form-row { display: flex; align-items: center; gap: 12px; }
+.mr-form-row label { flex: 0 0 190px; color: #000; font-size: 13px; }
+.mr-form-row select,
+.mr-form-row input,
+.mr-form-row .file-pick-row { flex: 1; }
+
+.mr-modal-settings input,
+.mr-modal-settings select {
+    background: #ffffff;
+    color: #000;
+    border: 1px solid #7a7a7a;
+    border-radius: 0;
+    padding: 1px 4px;
+    font-size: 13px;
+}
+
+.mr-modal-settings input[type="range"] { border: none; background: transparent; padding: 0; }
+
+.mr-modal-settings .checkbox-label { color: #000; font-size: 13px; }
+
+/* -------------------------------------------------------------
+   Verwaltungs-Dialoge auf Basis von base_manager_view.py (Quellen,
+   Playlists, ...): zentrierter Titel, Liste mit Song-Anzahl,
+   Hinzufügen-Zeile, normale MRButton-Aktionen statt plain-Buttons.
+   Klassen sind bewusst generisch (mr-manager-*), damit jeder neue
+   BaseManagerView-Ableger dieselben Regeln erbt statt sie pro Modal
+   zu duplizieren.
+   ------------------------------------------------------------- */
+.mr-modal-sources, .mr-modal-playlists { width: min(500px, 92vw); height: auto; max-height: 90vh; padding-top: 8px; }
+
+.mr-modal-title-center { text-align: center; font-size: 20px; font-weight: bold; color: #000; }
+
+.mr-manager-list {
+    background: #ffffff;
+    border: 1px solid #7a7a7a;
+    height: 220px;
+    overflow-y: auto;
+    margin: 12px 0;
+    padding: 2px;
+}
+
+.mr-manager-row {
+    display: block;
+    padding: 2px 4px;
+    font-size: 13px;
+    color: #000;
+    cursor: default;
+    user-select: none;
+}
+
+.mr-manager-row.selected { background: #0078d7; color: #fff; }
+
+.mr-manager-add-row { display: flex; flex-direction: row; align-items: center; gap: 8px; max-width: none; margin-bottom: 12px; }
+
+.mr-manager-add-row input {
+    flex: 1;
+    background: #ffffff;
+    color: #000;
+    border: 1px solid #7a7a7a;
+    border-radius: 0;
+    padding: 1px 2px;
+    font-size: 13px;
+}
+
+.mr-modal-rename { width: min(360px, 92vw); height: auto; padding-top: 8px; }
+
+.mr-modal-rename label { display: block; color: #000; font-size: 13px; margin-bottom: 4px; }
+
+.mr-modal-rename input[type="text"] {
+    width: 100%;
+    background: #ffffff;
+    color: #000;
+    border: 1px solid #7a7a7a;
+    border-radius: 0;
+    padding: 1px 2px;
+    font-size: 13px;
+    margin-bottom: 16px;
+}
+
+.mr-modal-reassign { width: min(400px, 92vw); height: auto; padding-top: 8px; }
+
+.mr-modal-reassign select {
+    width: 100%;
+    background: #ffffff;
+    color: #000;
+    border: 1px solid #7a7a7a;
+    border-radius: 0;
+    padding: 1px 4px;
+    font-size: 13px;
+    margin: 8px 0 16px;
+}
+
+/* -------------------------------------------------------------
+   Alle Songs (entspricht base_table_view.py: HeaderBar + Tabelle,
+   root-Margins 80/30 aus dem Original übernommen).
+   ------------------------------------------------------------- */
+.songs-page { padding: 30px 80px; }
+
+.mr-table-header {
+    background: var(--theme-accent);
+    color: var(--theme-header-text);
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    padding: 10px;
+    margin-bottom: 12px;
+}
+
+.mr-table-scroll { overflow-x: auto; }
+
+.mr-song-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #f8f8f8;
+    color: #000;
+    font-size: 14px;
+}
+
+.mr-song-table th {
+    height: 40px;
+    background: var(--theme-accent);
+    color: var(--theme-header-text);
+    text-align: center;
+    vertical-align: middle;
+    font-weight: 600;
+    padding: 0 6px;
+    white-space: nowrap;
+}
+
+.mr-song-table th img { height: 20px; width: 20px; vertical-align: middle; }
+
+.mr-song-table th[data-sort] { cursor: pointer; user-select: none; }
+.mr-song-table th[data-sort]:hover { background: var(--theme-button-hover-color); }
+.mr-song-table th.sorted-asc::after { content: ' \25B2'; font-size: 10px; }
+.mr-song-table th.sorted-desc::after { content: ' \25BC'; font-size: 10px; }
+
+.mr-song-table td {
+    height: 40px;
+    padding: 0 6px;
+    border-bottom: 1px solid #d0d0d0;
+    white-space: nowrap;
+}
+
+.mr-song-table tbody tr:nth-child(even) { background: #efefef; }
+
+.mr-song-table td.mr-col-center { text-align: center; }
+.mr-song-table td.mr-col-title, .mr-song-table td.mr-col-artist { white-space: normal; }
+
+.mr-check-box {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #000;
+    box-sizing: border-box;
+    margin: 0 auto;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mr-check-box.checked::after { content: ''; width: 12px; height: 12px; background: #000; }
+
+.mr-fav-toggle { width: 20px; height: 20px; display: block; margin: 0 auto; cursor: pointer; }
+
+.mr-row-actions { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.mr-row-actions img { width: 20px; height: 20px; cursor: pointer; }
+
+/* Kontextmenü (Rechtsklick auf einer Zeile oder Klick auf das
+   Menü-Icon) - identische 5 Aktionen an beiden Stellen. */
+.mr-context-menu {
+    position: fixed;
+    z-index: 50;
+    min-width: 200px;
+    background: #efefef;
+    border: 1px solid #888;
+    padding: 4px 0;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.mr-context-menu button,
+.mr-context-menu a {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 6px 16px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    color: #000;
+    font: inherit;
+    font-weight: normal;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.mr-context-menu button:hover,
+.mr-context-menu a:hover { background: var(--theme-accent); color: var(--theme-button-text); }
+
+.mr-context-menu hr { border: none; height: 1px; background: #ccc; margin: 4px 0; }
+
+/* -------------------------------------------------------------
+   Song bearbeiten (entspricht edit_song_dialog.py: nutzt dieselben
+   Formularfelder/Styling wie der Import-Dialog).
+   ------------------------------------------------------------- */
+.mr-modal-import #editLyricsInfo { margin: 0; font-size: 13px; color: #000; opacity: 0.85; }
+
+/* -------------------------------------------------------------
+   Lyrics anzeigen (entspricht show_lyrics_dialog.py: plain, nur
+   das Textfeld nutzt die Theme-Rahmenfarbe).
+   ------------------------------------------------------------- */
+.mr-modal-lyrics { width: min(700px, 92vw); height: min(520px, 88vh); padding-top: 8px; display: flex; flex-direction: column; }
+
+.mr-lyrics-title { text-align: center; font-size: 16px; font-weight: bold; color: #000; margin: 0; }
+.mr-lyrics-subtitle { text-align: center; font-size: 13px; color: #000; margin: 4px 0 12px; }
+
+.mr-lyrics-content {
+    flex: 1;
+    resize: none;
+    border: 2px solid var(--theme-border);
+    padding: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #000;
+    background: #fff;
+}
+
+.mr-modal-lyrics .mr-modal-actions { margin-top: 12px; gap: 10px; }
+
+/* -------------------------------------------------------------
+   Suche (entspricht search_view.py: zentriertes Logo + Suchzeile,
+   32px Abstand, kein eigener Karten-Hintergrund wie beim Login).
+   ------------------------------------------------------------- */
+.search-page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+}
+
+.search-logo { display: block; max-width: 620px; max-height: 340px; width: 100%; height: auto; }
+
+.search-row { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 0.75rem; max-width: none; }
+
+.search-input {
+    min-width: 420px;
+    max-width: 600px;
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 2px solid var(--theme-border);
+    background: var(--theme-alternate-bg);
+    color: var(--theme-home-title-text);
+}
+
+.search-input:focus {
+    border-color: var(--theme-accent);
+    background: var(--theme-bg);
+    outline: none;
+}
+
+.search-row button {
+    width: 110px;
+    height: 40px;
+    flex: none;
+}
+
+/* -------------------------------------------------------------
+   Tools-Dialoge mit Fortschrittsbalken + Liste (Datenbank überprüfen,
+   MIDI-Files scannen): entsprechen db_check_dialog.py/scanner_dialog.py -
+   plain, Label, Fortschrittsbalken, Ergebnisliste, ein oder zwei Buttons.
+   ------------------------------------------------------------- */
+.mr-modal-tool { width: min(900px, 95vw); height: auto; max-height: 90vh; padding-top: 8px; overflow-y: auto; }
+
+.mr-tool-list {
+    background: #ffffff;
+    border: 1px solid #7a7a7a;
+    height: 220px;
+    overflow-y: auto;
+    overflow-x: auto;
+    margin: 12px 0;
+    padding: 4px;
+}
+
+.mr-dbcheck-row { font-size: 13px; color: #c0392b; padding: 2px 4px; white-space: nowrap; }
+.mr-scan-row { font-size: 13px; color: #000; padding: 2px 4px; white-space: nowrap; }
+.mr-scan-row.imported { color: #2e7d32; }
+
+/* -------------------------------------------------------------
+   Mixer (entspricht mixer_dialog.py/channel_strip_widget.py: Header mit
+   Titel+Play/Stop/Export, horizontal scrollbare Kanalstreifen, Fußzeile
+   mit Dateipfad - bewusst immer weiß/schwarz wie Alle-Songs-Tabelle,
+   unabhängig vom Theme).
+   ------------------------------------------------------------- */
+.mr-modal-mixer {
+    width: auto;
+    max-width: 96vw;
+    height: min(650px, 90vh);
+    padding-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: hidden;
+}
+
+.mixer-header { display: flex; align-items: center; gap: 1rem; }
+
+.mixer-title { font-size: 16px; font-weight: bold; color: #000; margin: 0; flex: 1; }
+
+.mixer-header-actions { display: flex; gap: 10px; align-items: center; }
+
+#mixerExportResult { margin: 0; font-size: 13px; color: #000; min-height: 1.2em; }
+
+.mixer-strips-scroll { overflow-x: auto; flex: 1; }
+
+.mixer-strips { display: flex; gap: 8px; padding: 5px; min-height: 420px; }
+
+.mixer-empty { text-align: center; color: #000; }
+
+.mixer-strip {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 120px;
+    flex: none;
+    color: #000;
+    font-size: 13px;
+}
+
+.mixer-strip-label { font-weight: bold; }
+
+.mixer-pan-row { display: flex; align-items: center; gap: 4px; width: 100%; }
+.mixer-pan-slider { flex: 1; width: auto; min-width: 0; height: 16px; }
+.mixer-pan-slider::-webkit-slider-thumb { width: 12px; height: 12px; }
+.mixer-pan-slider::-moz-range-thumb { width: 12px; height: 12px; }
+.mixer-pan-lbl { font-size: 11px; opacity: 0.7; flex: none; }
+
+.mixer-volume-row {
+    width: 40px;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mixer-volume-slider {
+    width: 150px;
+    height: 20px;
+    transform: rotate(-90deg);
+}
+
+.mixer-sm-row { display: flex; gap: 6px; }
+
+.mixer-solo-btn, .mixer-mute-btn {
+    width: 28px;
+    padding: 2px 0;
+    background: #e6e6e6;
+    border: 1px solid #bfbfbf;
+    color: #000;
+    font-weight: normal;
+    font-size: 13px;
+    border-radius: 0;
+}
+
+.mixer-solo-btn.active { background: #ffd447; border-color: #aa8c00; font-weight: bold; }
+.mixer-mute-btn.active { background: #ff6b6b; border-color: #9b0000; font-weight: bold; }
+
+.mixer-instrument { text-align: center; word-break: break-word; }
+
+.mixer-footer {
+    background: #e0ecff;
+    color: #000;
+    padding: 6px;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 13px;
+}

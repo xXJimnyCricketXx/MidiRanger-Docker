@@ -1,0 +1,15 @@
+{% load static %}
+<footer class="statusbar">
+    <div class="statusbar-slot statusbar-left" id="statusbarLeft">{{ status_message|default:"" }}</div>
+    <div class="statusbar-slot statusbar-center" id="statusbarCenter">
+        {% if now_playing %}
+            <span class="statusbar-title" id="statusbarTitle">{{ now_playing.title }}{% if now_playing.artist %} – {{ now_playing.artist }}{% endif %}</span>
+            <button type="button" class="statusbar-stop-btn" id="statusbarStopBtn" aria-label="Stop">
+                <img src="{% static 'ressources/icons/stop.png' %}" alt="Stop">
+            </button>
+        {% endif %}
+    </div>
+    <div class="statusbar-slot statusbar-right">Output: {{ midi_output_name|default:"–" }}</div>
+</footer>
+
+<script src="{% static 'scripts/player.js' %}" defer></script>

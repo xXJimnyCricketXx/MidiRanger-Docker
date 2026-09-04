@@ -1,0 +1,52 @@
+{% load static %}
+<input type="hidden" id="mixerSongId" value="{{ song.id }}">
+<div class="mixer-header">
+    <h1 class="mixer-title">Mixer – {{ song.title }}{% if song.artist %}&nbsp;&nbsp;{{ song.artist }}{% endif %}</h1>
+    <div class="mixer-header-actions" id="mixerActions">
+        <button type="button" id="mixerPlayBtn" class="mr-btn-plain">▶ Play</button>
+        <button type="button" id="mixerStopBtn" class="mr-btn-plain">⏹ Stop</button>
+        <button type="button" id="mixerExportBtn" class="mr-btn-plain">Exportieren</button>
+        <button type="button" id="mixerCloseBtn" data-modal-close class="mr-btn-plain">✕ Schließen</button>
+    </div>
+    <div class="mixer-header-actions" id="mixerExportConfirm" hidden>
+        <span>Wirklich exportieren?</span>
+        <button type="button" id="mixerExportYes" class="mr-btn-plain">Ja</button>
+        <button type="button" id="mixerExportNo" class="mr-btn-plain">Nein</button>
+    </div>
+</div>
+
+<p id="mixerExportResult"></p>
+
+<div class="mixer-strips-scroll">
+    <div class="mixer-strips">
+        {% for ch in channels %}
+            <div class="mixer-strip" data-channel="{{ ch.channel }}">
+                <div class="mixer-strip-label">Ch {{ ch.display_channel }}</div>
+                <div class="mixer-strip-program">{% if ch.program != None %}Program {{ ch.program }}{% endif %}</div>
+
+                <div class="mixer-pan-value">Pan: <span class="mixer-pan-value-num">{{ ch.pan }}</span></div>
+                <div class="mixer-pan-row">
+                    <span class="mixer-pan-lbl">L</span>
+                    <input type="range" class="mixer-pan-slider" min="-64" max="63" value="{{ ch.pan }}">
+                    <span class="mixer-pan-lbl">R</span>
+                </div>
+
+                <div class="mixer-volume-value">Volume: <span class="mixer-volume-value-num">{{ ch.volume_to_db }}</span></div>
+                <div class="mixer-volume-row">
+                    <input type="range" class="mixer-volume-slider" min="0" max="127" value="{{ ch.volume }}">
+                </div>
+
+                <div class="mixer-sm-row">
+                    <button type="button" class="mixer-solo-btn{% if ch.solo %} active{% endif %}">S</button>
+                    <button type="button" class="mixer-mute-btn{% if ch.mute %} active{% endif %}">M</button>
+                </div>
+
+                <div class="mixer-instrument">{{ ch.instrument }}</div>
+            </div>
+        {% empty %}
+            <p class="mixer-empty">Keine MIDI-Channels gefunden.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="mixer-footer">{{ song.filename }}</div>
