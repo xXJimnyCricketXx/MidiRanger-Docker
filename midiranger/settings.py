@@ -20,9 +20,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(BASE_DIR / '.env')
 
-# MR_DATA_DIR wird nur im Docker-Image gesetzt (Mount auf Unraid-Appdata für
-# DB + Logs). Lokal unverändert BASE_DIR (Datenbank/Logs bleiben wo sie sind).
-DATA_DIR = Path(os.environ.get('MR_DATA_DIR', BASE_DIR))
+# MR_DATA_DIR wird im Docker-Image auf /data gesetzt (Mount auf Unraid-
+# Appdata). Lokal Default BASE_DIR/data - analog zu get_data_dir() im
+# Original (dev-modus/alt/src/utils/path_utils.py).
+DATA_DIR = Path(os.environ.get('MR_DATA_DIR', BASE_DIR / 'data'))
+DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-dev-only-change-me')
 
@@ -127,7 +129,7 @@ LOGGING = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': DATA_DIR / 'db.sqlite3',
+        'NAME': DATA_DIR / 'midiranger.db',
     }
 }
 

@@ -9,16 +9,16 @@
   <Project>https://github.com/xXJimnyCricketXx/MidiRanger-Docker</Project>
   <Overview>MidiRanger - MIDI-Bibliotheksverwaltung und -Player mit Weboberflaeche, steuerbar von jedem Browser im Netzwerk (PC/Tablet/Handy/TV). Unterstuetzt FluidSynth-Software-Synth und echte MIDI-Hardware (z.B. Roland UM-ONE).</Overview>
   <Category>MediaApp:Music Tools:</Category>
-  <WebUI>http://[IP]:[PORT:8000]/</WebUI>
+  <WebUI>http://[IP]:[PORT:18005]/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/xXJimnyCricketXx/MidiRanger-Docker/main/unraid-template/midiranger.xml</TemplateURL>
-  <Icon></Icon>
+  <Icon>https://raw.githubusercontent.com/xXJimnyCricketXx/MidiRanger-Docker/main/static/ressources/midiranger_icon.png</Icon>
   <ExtraParams></ExtraParams>
   <DateInstalled></DateInstalled>
   <DonateText></DonateText>
   <DonateLink></DonateLink>
   <Requires></Requires>
 
-  <Config Name="WebUI Port" Target="8000" Default="8000" Mode="tcp" Description="Port fuer die Weboberflaeche" Type="Port" Display="always" Required="true" Mask="false">8000</Config>
+  <Config Name="WebUI Port" Target="8000" Default="18005" Mode="tcp" Description="Port fuer die Weboberflaeche" Type="Port" Display="always" Required="true" Mask="false">18005</Config>
 
   <Config Name="Appdata (DB / Logs / Backups)" Target="/data" Default="/mnt/user/appdata/midiranger" Mode="rw" Description="Datenbank, Logs und Backups - normaler Appdata-Ordner" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/midiranger</Config>
 
@@ -31,8 +31,6 @@
   <Config Name="SEED_ADMIN_USERNAME" Target="SEED_ADMIN_USERNAME" Default="admin" Mode="" Description="Benutzername des Admin-Accounts (wird nur beim allerersten Start angelegt)" Type="Variable" Display="always" Required="false" Mask="false">admin</Config>
 
   <Config Name="SEED_ADMIN_PASSWORD" Target="SEED_ADMIN_PASSWORD" Default="admin123" Mode="" Description="Passwort des Admin-Accounts (wird nur beim allerersten Start angelegt) - danach in den Settings aendern!" Type="Variable" Display="always" Required="false" Mask="true">admin123</Config>
-
-  <Config Name="MIDI_OUTPUT_NAME" Target="MIDI_OUTPUT_NAME" Default="" Mode="" Description="ALSA-Name bzw. Teilstring des MIDI-Ausgabegeraets, z.B. 'UM-ONE'. Leer lassen, um automatisch den ersten passenden Port zu waehlen." Type="Variable" Display="advanced" Required="false" Mask="false"></Config>
 
   <Config Name="DJANGO_ALLOWED_HOSTS" Target="DJANGO_ALLOWED_HOSTS" Default="*" Mode="" Description="Erlaubte Hostnamen/IPs, kommagetrennt (* = alle)" Type="Variable" Display="advanced" Required="false" Mask="false">*</Config>
 

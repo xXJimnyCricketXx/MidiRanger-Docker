@@ -3,7 +3,6 @@
 # bei uns sinnvoll eingegrenzt auf die tatsächlich schützenswerten Daten
 # (DB + midi/-Bibliothek), nicht den Code/venv. Fester Zielordner statt
 # Ordnerauswahl, da der Docker-Container einen festen appdata-Mount nutzt.
-import os
 import zipfile
 from datetime import datetime
 from pathlib import Path
@@ -12,10 +11,7 @@ from django.conf import settings
 
 from . import paths
 
-# MR_DATA_DIR wird nur im Docker-Image gesetzt (fester Appdata-Mount, siehe
-# Kommentar oben) - lokal unverändert BASE_DIR/data/backups.
-_data_dir_env = os.environ.get('MR_DATA_DIR')
-BACKUPS_DIR = (Path(_data_dir_env) / 'backups') if _data_dir_env else (settings.BASE_DIR / 'data' / 'backups')
+BACKUPS_DIR = settings.DATA_DIR / 'backups'
 DB_PATH = Path(settings.DATABASES['default']['NAME'])
 
 
@@ -27,7 +23,7 @@ def create_backup() -> str:
 
     with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
         if DB_PATH.exists():
-            zipf.write(DB_PATH, arcname='db.sqlite3')
+            zipf.write(DB_PATH, arcname='midiranger.db')
 
         if paths.MIDI_DIR.exists():
             for file_path in paths.MIDI_DIR.rglob('*'):
