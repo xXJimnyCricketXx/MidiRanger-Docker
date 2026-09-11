@@ -88,6 +88,12 @@ LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login'
 
+# Für Kiosk-Tablets (fest im LAN montiert): Session hält 1 Jahr statt der
+# Django-Standard-2-Wochen und verlängert sich bei jeder Nutzung, damit man
+# sich dort praktisch nur einmal einloggen muss.
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 365
+SESSION_SAVE_EVERY_REQUEST = True
+
 # Entspricht utils/logger.py: RotatingFileHandler, identisches Format/Pfad.
 LOG_DIR = DATA_DIR / 'logs'
 LOG_DIR.mkdir(parents=True, exist_ok=True)
